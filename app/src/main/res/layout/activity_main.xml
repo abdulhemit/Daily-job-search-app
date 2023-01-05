@@ -9,5 +9,14 @@
     tools:context=".MainActivity">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="welcome to mainActivity"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textColor="@color/pickColor"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

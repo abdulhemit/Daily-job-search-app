@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165477381954",
+    "project_id": "gunlukhizmet",
+    "storage_bucket": "gunlukhizmet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165477381954:android:90e5b2ed89b07c941bfadb",
+        "android_client_info": {
+          "package_name": "com.example.gunlukis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165477381954-lnensvt6j4fhbpr2pm9lvotv4nnr9sqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYUHNCkc2c7E5uJW6END_385dWcySOdY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165477381954-lnensvt6j4fhbpr2pm9lvotv4nnr9sqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

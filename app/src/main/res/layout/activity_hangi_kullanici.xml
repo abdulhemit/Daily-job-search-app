@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/elemanLinearlayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:orientation="vertical"
         android:gravity="center"
         android:background="@color/pickColor"
@@ -40,14 +40,15 @@
            />
 
         <TextView
-            android:id="@+id/IsAriyorum"
+            android:id="@+id/ElemanAriyorum"
             android:layout_width="250dp"
             android:layout_height="55dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="Eleman arıyorum"
             android:textColor="@color/pickColor"
-            android:background="@drawable/switch_trcks"
+            android:background="@drawable/switch_tumbs"
+            android:backgroundTint="@color/white"
             android:textSize="22sp"
             android:textStyle="bold"
             />
@@ -82,7 +83,7 @@
 
 
     <TextView
-        android:id="@+id/elemanAriyorum"
+        android:id="@+id/IsAriyorum"
         android:layout_width="250dp"
         android:layout_height="55dp"
         android:layout_below="@id/gulukisibul"
@@ -91,7 +92,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/switch_tumbs"
         android:gravity="center"
-        android:text="Iş Ariyorum"
+        android:text="Iş arıyorum"
         android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold" />

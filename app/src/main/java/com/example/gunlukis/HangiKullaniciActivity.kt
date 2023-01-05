@@ -1,11 +1,20 @@
 package com.example.gunlukis
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.gunlukis.databinding.ActivityHangiKullaniciBinding
+
 
 class HangiKullaniciActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHangiKullaniciBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hangi_kullanici)
+        binding = ActivityHangiKullaniciBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val view = binding
+        binding.IsAriyorum.setOnClickListener {
+            startActivity(Intent(this@HangiKullaniciActivity,isAriyorumGiris::class.java))
+        }
     }
 }
