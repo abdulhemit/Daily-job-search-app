@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.example.gunlukis.databinding.ActivityGirisBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.sarnava.textwriter.TextWriter
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
@@ -13,12 +14,15 @@ class girisActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGirisBinding
     private lateinit var runnable: Runnable
     private lateinit var handler: Handler
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGirisBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //auth.signOut()
+
 
 
         binding.textWriter
@@ -32,8 +36,18 @@ class girisActivity : AppCompatActivity() {
             .startAnimation()
 
         runnable = Runnable{
+            auth = FirebaseAuth.getInstance()
+
+            if (auth.currentUser != null){
+                startActivity(Intent(this@girisActivity,MainActivity::class.java))
+                finish()
+            }else{
+
             startActivity(Intent(this@girisActivity,HangiKullaniciActivity::class.java))
             finish()
+
+            }
+
         }
         handler = Handler()
         handler.postDelayed(runnable,8000)

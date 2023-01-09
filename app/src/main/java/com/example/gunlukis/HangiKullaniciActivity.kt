@@ -16,5 +16,8 @@ class HangiKullaniciActivity : AppCompatActivity() {
         binding.IsAriyorum.setOnClickListener {
             startActivity(Intent(this@HangiKullaniciActivity,isAriyorumGiris::class.java))
         }
+        binding.ElemanAriyorum.setOnClickListener {
+            startActivity(Intent(this@HangiKullaniciActivity,elemanAriyorumActivity::class.java))
+        }
     }
 }
