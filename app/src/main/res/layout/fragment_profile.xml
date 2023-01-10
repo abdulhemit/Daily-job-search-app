@@ -6,6 +6,300 @@
     android:layout_height="match_parent"
     tools:context=".fragments.profileFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/id_appbarLayout_ProfileFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/id_toolbar_ProfileFragment"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/white"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/ic_baseline_local_post_office_24"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="1dp"
+                    android:text="Profil"
+                    android:textColor="@color/pickColor"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/ic_settings"
+                    android:layout_marginEnd="20dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <View
+        android:id="@+id/appbarAndcircle_view"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#edede9"
+        app:layout_constraintTop_toBottomOf="@id/id_appbarLayout_ProfileFragment"
+        />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/Cardview"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintTop_toBottomOf="@id/appbarAndcircle_view"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="35dp"
+        app:cardCornerRadius="14dp"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/profile"
+
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/Cardview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/Cardview"
+        android:text="Ibrahim Erdem"
+        android:textSize="22sp"
+        android:textColor="@color/pickColor"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/Cardview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/Cardview"
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="#e5e5e5"
+        app:cardCornerRadius="14dp"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/Cardview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/Cardview"
+            app:layout_constraintTop_toBottomOf="@id/userName"
+            android:text="Profili Düzenle"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="20sp"
+            android:selectAllOnFocus="true"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:textColor="@color/pickColor"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:id="@+id/secondView"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#edede9"
+        android:layout_marginTop="30sp"
+        app:layout_constraintTop_toBottomOf="@id/Cardview"
+        />
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:id="@+id/constraintLayoutForWorker"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       app:layout_constraintTop_toBottomOf="@id/secondView"
+       >
+       <TextView
+           android:id="@+id/yaptigimHizmetler"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="parent"
+           android:text="Yaptığım işler"
+           android:textSize="20dp"
+           android:paddingStart="20dp"
+           android:textColor="@color/pickColor"
+           android:paddingTop="10dp"
+           android:paddingBottom="10dp"
+           />
+       <View
+           android:id="@+id/htreeView"
+           android:layout_width="match_parent"
+           android:layout_height="2dp"
+           android:background="#edede9"
+           android:layout_marginStart="20sp"
+           android:layout_marginEnd="20dp"
+           app:layout_constraintTop_toBottomOf="@id/yaptigimHizmetler"
+           />
+       <TextView
+           android:id="@+id/takipEdilenIsler"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toBottomOf="@id/htreeView"
+           android:text="Takip edilen iş yerleri"
+           android:textSize="20dp"
+           android:paddingStart="20dp"
+           android:textColor="@color/pickColor"
+           android:paddingTop="10dp"
+           android:paddingBottom="10dp"
+           />
+       <View
+           android:id="@+id/fourView"
+           android:layout_width="match_parent"
+           android:layout_height="2dp"
+           android:background="#edede9"
+           android:layout_marginStart="20sp"
+           android:layout_marginEnd="20dp"
+           app:layout_constraintTop_toBottomOf="@id/takipEdilenIsler"
+           />
+       <TextView
+           android:id="@+id/bizeUlasin"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toBottomOf="@id/fourView"
+           android:text="Uygulamaya destek"
+           android:textSize="20dp"
+           android:paddingStart="20dp"
+           android:textColor="@color/pickColor"
+           android:paddingTop="10dp"
+           android:paddingBottom="10dp"
+           />
+       <View
+           android:id="@+id/fiveView"
+           android:layout_width="match_parent"
+           android:layout_height="10dp"
+           android:background="#edede9"
+           app:layout_constraintTop_toBottomOf="@id/bizeUlasin"
+           />
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutForBoss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/secondView"
+        >
+        <TextView
+            android:id="@+id/bugunkuİlanlarim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Bugün yayınladığım iş ilanlari"
+            android:textSize="20dp"
+            android:paddingStart="20dp"
+            android:textColor="@color/pickColor"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
+        <View
+            android:id="@+id/htreeViewboss"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#edede9"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@id/bugunkuİlanlarim"
+            />
+        <TextView
+            android:id="@+id/oncekiİlanlarim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/htreeViewboss"
+            android:text="Eski iş ilanlarim"
+            android:textSize="20dp"
+            android:paddingStart="20dp"
+            android:textColor="@color/pickColor"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
+        <View
+            android:id="@+id/fourViewboss"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#edede9"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@id/oncekiİlanlarim"
+            />
+        <TextView
+            android:id="@+id/bizeUlasinboss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fourViewboss"
+            android:text="Uygulamaya destek"
+            android:textSize="20dp"
+            android:paddingStart="20dp"
+            android:textColor="@color/pickColor"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
+        <View
+            android:id="@+id/fiveViewboss"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#edede9"
+            app:layout_constraintTop_toBottomOf="@id/bizeUlasinboss"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/out"

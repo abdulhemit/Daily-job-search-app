@@ -37,12 +37,6 @@ class MainActivity : AppCompatActivity() {
         WorkersUsers()
 
 
-
-
-
-
-
-
     }
     private fun moveToFragment(fragment: Fragment){
         val fragmentTransaction = supportFragmentManager.beginTransaction()
