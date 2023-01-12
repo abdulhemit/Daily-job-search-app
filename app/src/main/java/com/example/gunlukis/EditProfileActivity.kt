@@ -1,15 +1,9 @@
-package com.example.gunlukis.fragments
+package com.example.gunlukis
 
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.example.gunlukis.EditProfileActivity
-import com.example.gunlukis.HangiKullaniciActivity
-import com.example.gunlukis.R
-import com.example.gunlukis.databinding.FragmentHomeBinding
+import com.example.gunlukis.databinding.ActivityEditProfileBinding
 import com.example.gunlukis.databinding.FragmentProfileBinding
 import com.example.gunlukis.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -17,48 +11,23 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
-class profileFragment : Fragment() {
+class EditProfileActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityEditProfileBinding
 
-    private var _binding : FragmentProfileBinding? = null
-    private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var workerList: MutableList<User>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
-
-
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val view = binding.root
-        binding.out.setOnClickListener {
-            auth.signOut()
-            startActivity(Intent(requireContext(),HangiKullaniciActivity::class.java))
-        }
-
-
         WorkersUsers()
 
-        binding.EditProfile.setOnClickListener {
-            startActivity(Intent(requireContext(),EditProfileActivity::class.java))
-        }
-
-
-
-        return binding.root
     }
-
 
 
     private fun WorkersUsers() {
@@ -81,9 +50,6 @@ class profileFragment : Fragment() {
                     for(id in (workerList as ArrayList<String>)) {
 
                         if (auth.currentUser!!.uid == id) {
-                            binding.constraintLayoutForBoss.visibility = View.GONE
-                            binding.constraintLayoutForWorker.visibility = View.VISIBLE
-
                             getUserWorker()
 
                         }else{
@@ -111,21 +77,19 @@ class profileFragment : Fragment() {
                 if (snapshot.exists()){
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
-                        binding.userName.text = it!!.userName
+                        binding.idAdSoyAd.setText(it?.userName)
+                        Picasso.get().load(it?.image).into(binding.imageProfileEditProfileActivity)
+
                     }
 
                 }
-
-
             }
-
             override fun onCancelled(error: DatabaseError) {
 
             }
 
         })
     }
-
     private fun BossUsers() {
 
         workerList = ArrayList()
@@ -145,8 +109,6 @@ class profileFragment : Fragment() {
                     for(id in (workerList as ArrayList<String>)) {
 
                         if (auth.currentUser!!.uid == id) {
-                            binding.constraintLayoutForWorker.visibility = View.GONE
-                            binding.constraintLayoutForBoss.visibility = View.VISIBLE
                             getUserBoss()
                         }
                     }
@@ -171,7 +133,8 @@ class profileFragment : Fragment() {
                 if (snapshot.exists()){
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
-                        binding.userName.text = it!!.userName
+                        binding.idAdSoyAd.setText(it?.userName)
+                        Picasso.get().load(it?.image).into(binding.imageProfileEditProfileActivity)
                     }
 
                 }
@@ -186,6 +149,4 @@ class profileFragment : Fragment() {
         })
 
     }
-
-
 }

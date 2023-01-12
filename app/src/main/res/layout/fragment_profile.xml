@@ -78,8 +78,8 @@
         >
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:src="@drawable/profile"
 
             />
@@ -94,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/Cardview"
         android:text="Ibrahim Erdem"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textColor="@color/pickColor"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
@@ -113,6 +113,7 @@
         android:layout_gravity="center"
         >
         <TextView
+            android:id="@+id/EditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/Cardview"
@@ -120,11 +121,11 @@
             app:layout_constraintStart_toEndOf="@id/Cardview"
             app:layout_constraintTop_toBottomOf="@id/userName"
             android:text="Profili Düzenle"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:textSize="20sp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textSize="18sp"
             android:selectAllOnFocus="true"
             android:gravity="center"
             android:textAllCaps="false"
