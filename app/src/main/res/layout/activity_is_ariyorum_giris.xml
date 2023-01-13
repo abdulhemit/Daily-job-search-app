@@ -46,7 +46,7 @@
                     android:layout_weight="1"
                     android:paddingTop="5dp"
                     android:textAlignment="center"
-                    android:text="Login in"
+                    android:text="Giriş yap"
                     android:textSize="16sp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
@@ -67,7 +67,7 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:textAlignment="center"
-                    android:text="Sing Up"
+                    android:text="Üye Ol"
                     android:textSize="16sp"
                     android:background="@color/white"
                     android:textStyle="bold|normal"
@@ -125,7 +125,7 @@
                     app:endIconMode="password_toggle"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
-                    android:hint="Password"
+                    android:hint="Şifre"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -146,7 +146,7 @@
                     android:textStyle="normal"
                     android:textSize="11sp"
                     android:textColor="#616161"
-                    android:text="Forget Password?"
+                    android:text="Parolanızı mı unuttunuz?"
                     android:textAlignment="textEnd"
                     android:layout_marginTop="5dp"
 
@@ -224,7 +224,7 @@
                     app:endIconMode="password_toggle"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
-                    android:hint="Password"
+                    android:hint="Şifre"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -249,7 +249,7 @@
                     app:endIconMode="password_toggle"
                     app:boxStrokeColor="#4E4A4A"
                     app:boxStrokeWidth="1dp"
-                    android:hint="Confirm Password"
+                    android:hint="Şifreyi Onayla"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -280,7 +280,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                android:textColor="@color/white"
-                android:text="Log In"
+                android:text="Giriş yap"
                 android:layout_gravity="center"
                 app:shapeAppearanceOverlay="@style/button5"
                 android:backgroundTint="@color/pickColor"

@@ -64,8 +64,8 @@ class isAriyorumGiris : AppCompatActivity() {
 
             else -> {
                 val progressDialog = ProgressDialog(this@isAriyorumGiris)
-                progressDialog.setTitle("Sing up")
-                progressDialog.setMessage("Please wait, This may take a while...")
+                progressDialog.setTitle("Giriş yap")
+                progressDialog.setMessage("Lütfen bekleyin, Bu biraz zaman alabilir...")
                 progressDialog.setCanceledOnTouchOutside(false)
                 progressDialog.show()
 
@@ -98,8 +98,8 @@ class isAriyorumGiris : AppCompatActivity() {
                 if (binding.SingUpPasswords.text.toString() == binding.SingUPPasswords01.text.toString()){
 
                     val progressDialog = ProgressDialog(this@isAriyorumGiris)
-                    progressDialog.setTitle("Sing up")
-                    progressDialog.setMessage("Please wait, This may take a while...")
+                    progressDialog.setTitle("Üye Ol")
+                    progressDialog.setMessage("Lütfen bekleyin, Bu biraz zaman alabilir...")
                     progressDialog.setCanceledOnTouchOutside(false)
                     progressDialog.show()
 
@@ -135,6 +135,7 @@ class isAriyorumGiris : AppCompatActivity() {
         userMap["uid"] = currentUserId
         userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
         userMap["eMail"] = binding.singUpEMail.text.toString()
+        userMap["onYazi"] = "Günlül iş arama uygulaması kullanıyorum"
         userMap["image"] = "https://firebasestorage.googleapis.com/v0/b/gunlukhizmet.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=16557ef4-02b0-4f16-81b1-735bb424cc0a"
 
        usersRaf.child(currentUserId).setValue(userMap)

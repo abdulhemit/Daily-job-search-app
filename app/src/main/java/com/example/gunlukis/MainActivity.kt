@@ -1,10 +1,13 @@
 package com.example.gunlukis
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -38,10 +41,18 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
+
+
     private fun moveToFragment(fragment: Fragment){
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragmentContainer,fragment).commit()
+        fragmentTransaction.replace(R.id.fragmentContainer,fragment).commitAllowingStateLoss()
     }
+
+
 
 
     private val onNavigationItemSelectedListenerForWorkers = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -118,7 +129,9 @@ class MainActivity : AppCompatActivity() {
                             binding.navViewForBosses.visibility = View.GONE
                             binding.navViewForWorkers.setOnNavigationItemSelectedListener(onNavigationItemSelectedListenerForWorkers)
 
-                            moveToFragment(homeFragment())
+                                moveToFragment(homeFragment())
+
+
                         }else{
                             BossUsers()
                         }

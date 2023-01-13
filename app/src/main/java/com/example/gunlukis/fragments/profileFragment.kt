@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
 
 class profileFragment : Fragment() {
 
@@ -112,6 +113,7 @@ class profileFragment : Fragment() {
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
                         binding.userName.text = it!!.userName
+                        Picasso.get().load(it.image).into(binding.profileImage)
                     }
 
                 }
@@ -172,6 +174,7 @@ class profileFragment : Fragment() {
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
                         binding.userName.text = it!!.userName
+                        Picasso.get().load(it.image).into(binding.profileImage)
                     }
 
                 }
