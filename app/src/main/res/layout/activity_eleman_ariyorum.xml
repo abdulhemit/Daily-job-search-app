@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pickColor"
-    tools:context=".elemanAriyorumActivity">
+    tools:context=".activities.elemanAriyorumActivity">
 
     <androidx.cardview.widget.CardView
         app:layout_constraintTop_toTopOf="parent"

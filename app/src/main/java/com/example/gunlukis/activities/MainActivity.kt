@@ -1,17 +1,13 @@
-package com.example.gunlukis
+package com.example.gunlukis.activities
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.AttributeSet
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityMainBinding
+import com.example.gunlukis.fragments.PostJobFragment
 import com.example.gunlukis.fragments.homeFragment
 import com.example.gunlukis.fragments.messageFragment
 import com.example.gunlukis.fragments.profileFragment
@@ -22,7 +18,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.sarnava.textwriter.TextWriter
 
 class MainActivity : AppCompatActivity() {
    private lateinit var binding : ActivityMainBinding
@@ -86,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.nav_addJObBoss -> {
 
-                moveToFragment(homeFragment())
+                moveToFragment(PostJobFragment())
                 return@OnNavigationItemSelectedListener  true
             }
             R.id.nav_messageBoss -> {

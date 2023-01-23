@@ -15,28 +15,28 @@
         android:theme="@style/Theme.GunlukIs"
         tools:targetApi="31">
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".activities.EditProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".elemanAriyorumActivity"
+            android:name=".activities.elemanAriyorumActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".isAriyorumGiris"
+            android:name=".activities.isAriyorumGiris"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".girisActivity"
+            android:name=".activities.girisActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,14 +49,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".HangiKullaniciActivity"
+            android:name=".activities.HangiKullaniciActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"

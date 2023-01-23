@@ -1,4 +1,4 @@
-package com.example.gunlukis
+package com.example.gunlukis.activities
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
+import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityElemanAriyorumBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -70,7 +71,7 @@ class elemanAriyorumActivity : AppCompatActivity() {
                     .addOnCompleteListener { task->
                         if(task.isSuccessful){
                             progressDialog.dismiss()
-                            startActivity(Intent(this@elemanAriyorumActivity,MainActivity::class.java))
+                            startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
                             finish()
                         }else{
 
@@ -142,7 +143,7 @@ class elemanAriyorumActivity : AppCompatActivity() {
             .addOnCompleteListener { task->
                 if (task.isSuccessful){
                     progressDialog.dismiss()
-                    startActivity(Intent(this@elemanAriyorumActivity,MainActivity::class.java))
+                    startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
                     finish()
 
                 }else{

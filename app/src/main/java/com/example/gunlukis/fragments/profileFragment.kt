@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.gunlukis.EditProfileActivity
-import com.example.gunlukis.HangiKullaniciActivity
-import com.example.gunlukis.R
-import com.example.gunlukis.databinding.FragmentHomeBinding
+import com.example.gunlukis.activities.EditProfileActivity
+import com.example.gunlukis.activities.HangiKullaniciActivity
 import com.example.gunlukis.databinding.FragmentProfileBinding
 import com.example.gunlukis.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +19,10 @@ import com.squareup.picasso.Picasso
 
 class profileFragment : Fragment() {
 
+    // github token
+    //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
+
+    
     private var _binding : FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
@@ -45,14 +47,14 @@ class profileFragment : Fragment() {
         val view = binding.root
         binding.out.setOnClickListener {
             auth.signOut()
-            startActivity(Intent(requireContext(),HangiKullaniciActivity::class.java))
+            startActivity(Intent(requireContext(), HangiKullaniciActivity::class.java))
         }
 
 
         WorkersUsers()
 
         binding.EditProfile.setOnClickListener {
-            startActivity(Intent(requireContext(),EditProfileActivity::class.java))
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
         }
 
 

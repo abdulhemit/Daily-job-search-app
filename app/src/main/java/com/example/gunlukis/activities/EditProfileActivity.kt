@@ -1,4 +1,4 @@
-package com.example.gunlukis
+package com.example.gunlukis.activities
 
 import android.Manifest
 import android.app.ProgressDialog
@@ -16,9 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.gunlukis.databinding.ActivityEditProfileBinding
-import com.example.gunlukis.databinding.FragmentProfileBinding
-import com.example.gunlukis.fragments.homeFragment
-import com.example.gunlukis.fragments.profileFragment
 import com.example.gunlukis.models.User
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
@@ -77,7 +74,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         WorkersUsers()
         binding.closeImageBtnProfileEdit.setOnClickListener {
-            startActivity(Intent(this@EditProfileActivity,MainActivity::class.java))
+            startActivity(Intent(this@EditProfileActivity, MainActivity::class.java))
             finish()
         }
 
@@ -260,7 +257,7 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful){
                     progressDialog.dismiss()
 
-                    val intent = Intent(this@EditProfileActivity,MainActivity::class.java)
+                    val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
 
@@ -286,7 +283,7 @@ class EditProfileActivity : AppCompatActivity() {
             .addOnCompleteListener { task->
                 if(task.isSuccessful){
                     progressDialog.dismiss()
-                    startActivity(Intent(this@EditProfileActivity,MainActivity::class.java))
+                    startActivity(Intent(this@EditProfileActivity, MainActivity::class.java))
                     finish()
 
                 }else{
@@ -427,7 +424,7 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful){
                     progressDialog.dismiss()
 
-                    val intent = Intent(this@EditProfileActivity,MainActivity::class.java)
+                    val intent = Intent(this@EditProfileActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
 
@@ -456,7 +453,7 @@ class EditProfileActivity : AppCompatActivity() {
             .addOnCompleteListener { task->
                 if(task.isSuccessful){
                     progressDialog.dismiss()
-                    startActivity(Intent(this@EditProfileActivity,MainActivity::class.java))
+                    startActivity(Intent(this@EditProfileActivity, MainActivity::class.java))
                     finish()
 
                 }else{

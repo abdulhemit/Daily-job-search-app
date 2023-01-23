@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="14dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="9dp"
+            >
+            <TextView
+                android:id="@+id/IsAdi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Temizlik"
+                android:textSize="20sp"
+                android:textColor="@color/pickColor"
+                />
+            <TextView
+                android:id="@+id/isFiyat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="250TL"
+                android:textSize="18sp"
+                android:textColor="@color/pickColor"
+                android:layout_marginTop="6dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="detayli bilgi...."
+
+                />
+
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

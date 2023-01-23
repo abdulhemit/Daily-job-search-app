@@ -1,14 +1,13 @@
-package com.example.gunlukis
+package com.example.gunlukis.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityGirisBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.sarnava.textwriter.TextWriter
-import kotlinx.coroutines.Delay
-import kotlinx.coroutines.delay
 
 class girisActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGirisBinding
@@ -39,11 +38,11 @@ class girisActivity : AppCompatActivity() {
             auth = FirebaseAuth.getInstance()
 
             if (auth.currentUser != null){
-                startActivity(Intent(this@girisActivity,MainActivity::class.java))
+                startActivity(Intent(this@girisActivity, MainActivity::class.java))
                 finish()
             }else{
 
-            startActivity(Intent(this@girisActivity,HangiKullaniciActivity::class.java))
+            startActivity(Intent(this@girisActivity, HangiKullaniciActivity::class.java))
             finish()
 
             }

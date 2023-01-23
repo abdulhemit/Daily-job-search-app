@@ -1,4 +1,4 @@
-package com.example.gunlukis
+package com.example.gunlukis.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +14,10 @@ class HangiKullaniciActivity : AppCompatActivity() {
         setContentView(binding.root)
         val view = binding
         binding.IsAriyorum.setOnClickListener {
-            startActivity(Intent(this@HangiKullaniciActivity,isAriyorumGiris::class.java))
+            startActivity(Intent(this@HangiKullaniciActivity, isAriyorumGiris::class.java))
         }
         binding.ElemanAriyorum.setOnClickListener {
-            startActivity(Intent(this@HangiKullaniciActivity,elemanAriyorumActivity::class.java))
+            startActivity(Intent(this@HangiKullaniciActivity, elemanAriyorumActivity::class.java))
         }
     }
 }

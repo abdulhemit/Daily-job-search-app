@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
-    tools:context=".HangiKullaniciActivity">
+    tools:context=".activities.HangiKullaniciActivity">
 
     <LinearLayout
         android:id="@+id/elemanLinearlayout"
