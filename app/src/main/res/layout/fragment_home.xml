@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.homeFragment">
+    <TextView
+        android:id="@+id/bosYayinladigimIlanlar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yayınladığım ilanlar"
+        android:textSize="18sp"
+        android:textColor="@color/pickColor"
+        android:background="@drawable/switch_tumbs2"
+        android:textStyle="bold"
+        android:paddingTop="9dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingBottom="9dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeFragmentRecyclirview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/bosYayinladigimIlanlar"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

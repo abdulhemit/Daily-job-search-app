@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityMainBinding
 import com.example.gunlukis.fragments.PostJobFragment

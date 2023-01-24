@@ -123,9 +123,8 @@ class EditProfileActivity : AppCompatActivity() {
 
         usersRaf.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-
-
                 if (snapshot.exists()){
+
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
                         binding.idAdSoyAd.setText(it?.userName)

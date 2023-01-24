@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import okhttp3.internal.Util
+import java.util.UUID
 
 
 class PostJobFragment : Fragment() {
@@ -26,6 +27,7 @@ class PostJobFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
+    private lateinit var uuid: UUID
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,66 +44,69 @@ class PostJobFragment : Fragment() {
         _binding = FragmentPostJobBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
-        /*
-        val postRef = database.reference.child("PostJob")
-            postRef.addValueEventListener(object :ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()){
-
-                        val postJob = snapshot.getValue<PostJob>(PostJob::class.java)
-                        for (snap in snapshot.children){
-                            val ilanAdi = snap.getValue(PostJob::class.java)
-                            binding.isIlaniId.setText(ilanAdi?.ilanAdi)
-                            binding.isFiyatiId.setText(ilanAdi?.ilanFiyati)
-                            binding.isAciklamaId.setText(ilanAdi?.ilanAciklama)
-                        }
-
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-            })
-
-
-
-         */
-
         binding.IdYayinla.setOnClickListener {
 
-            when{
-                TextUtils.isEmpty(binding.isIlaniId.text) -> Toast.makeText(requireContext(),"iş ilan adını giriniz",Toast.LENGTH_LONG).show()
-                TextUtils.isEmpty(binding.isFiyatiId.text) -> Toast.makeText(requireContext(),"iş fiyatını giriniz",Toast.LENGTH_LONG).show()
-                TextUtils.isEmpty(binding.isAciklamaId.text) -> Toast.makeText(requireContext(),"gereken açıklamaları yazınız",Toast.LENGTH_LONG).show()
+            saveJobs()
 
-                else -> {
-                    val postJobMap = HashMap<String,Any>()
-                    val currentId = auth.currentUser!!.uid
-                    postJobMap["ilanAdi"] = binding.isIlaniId.text.toString()
-                    postJobMap["ilanFiyati"] = binding.isFiyatiId.text.toString()
-                    postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
-                    postJobMap["uid"] = currentId
-
-                    val postRef = database.reference.child("PostJob")
-                    val pushkey = postRef.push().key
-                    postRef.child(pushkey!!).setValue(postJobMap).addOnCompleteListener { task->
-                        if (task.isSuccessful){
-                            Toast.makeText(requireContext(),"Basarili",Toast.LENGTH_LONG).show()
-                        }else{
-                            Toast.makeText(requireContext(),"Hata",Toast.LENGTH_LONG).show()
-
-                        }
-                    }
-
-                }
-            }
         }
 
 
         return binding.root
     }
+    private fun saveJobs(){
+
+        when{
+            TextUtils.isEmpty(binding.isIlaniId.text) -> Toast.makeText(requireContext(),"iş ilan adını giriniz",Toast.LENGTH_LONG).show()
+            TextUtils.isEmpty(binding.isFiyatiId.text) -> Toast.makeText(requireContext(),"iş fiyatını giriniz",Toast.LENGTH_LONG).show()
+            TextUtils.isEmpty(binding.isAciklamaId.text) -> Toast.makeText(requireContext(),"gereken açıklamaları yazınız",Toast.LENGTH_LONG).show()
+
+            else -> {
+                 uuid = UUID.randomUUID()
+                val postJobMap = HashMap<String,Any>()
+                val currentId = auth.currentUser!!.uid
+                postJobMap["ilanAdi"] = binding.isIlaniId.text.toString()
+                postJobMap["ilanFiyati"] = binding.isFiyatiId.text.toString()
+                postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
+                postJobMap["uid"] = currentId
+                postJobMap["postId"] = uuid.toString()
+
+                val postRef = database.reference.child("PostJob")
+                postRef.child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
+                    if (task.isSuccessful){
+                        Toast.makeText(requireContext(),"Basarili",Toast.LENGTH_LONG).show()
+                        saveMyJobs()
+
+                    }else{
+                        Toast.makeText(requireContext(),"Hata",Toast.LENGTH_LONG).show()
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun saveMyJobs(){
+
+        val postJobMap = HashMap<String,Any>()
+        val currentId = auth.currentUser!!.uid
+        postJobMap["ilanAdi"] = binding.isIlaniId.text.toString()
+        postJobMap["ilanFiyati"] = binding.isFiyatiId.text.toString()
+        postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
+        postJobMap["uid"] = currentId
+        postJobMap["postId"] = uuid.toString()
+
+        val myPostRef = database.reference.child("myPostJob")
+        myPostRef.child(auth.currentUser!!.uid.toString()).child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
+            if (task.isSuccessful){
+                Toast.makeText(requireContext(),"Basarili",Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(requireContext(),"Hata",Toast.LENGTH_LONG).show()
+
+            }
+        }
+    }
+
 
 
 }
