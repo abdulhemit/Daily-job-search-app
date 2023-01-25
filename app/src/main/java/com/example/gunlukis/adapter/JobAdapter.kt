@@ -24,22 +24,36 @@ class JobAdapter(val postJob: List<PostJob>,val fragmentManager: FragmentManager
         holder.binding.isFiyat.text = postJob[position].ilanFiyati
 
 
+
         holder.itemView.setOnClickListener {
 
+                val bundle = Bundle()
+                val ilandetayiFragment = IlanDetayiFragment()
+                bundle.putString(/* key = */ "postId",/* value = */
+                    postJob[position].postId
+                )
+                bundle.putString(/* key = */ "userId",/* value = */
+                    postJob[position].uid
+                )
+            postJob[position].worker?.let { info ->
+                bundle.putBoolean(/* key = */ "workerInfo",/* value = */
+                    info
+                )
+            }
+                ilandetayiFragment.arguments = bundle
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, ilandetayiFragment).commit()
 
-            val bundle = Bundle()
-            val ilandetayiFragment = IlanDetayiFragment()
-
-
-            val id = holder.itemView.id
-
-            bundle.putString(/* key = */ "postId",/* value = */ postJob[position].postId)
-            ilandetayiFragment.arguments = bundle
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainer,ilandetayiFragment).commit()
         }
+
     }
 
     override fun getItemCount(): Int {
         return postJob.size
     }
+
+
+
+
+
 }

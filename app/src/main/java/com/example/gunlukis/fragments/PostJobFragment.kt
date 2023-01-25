@@ -1,5 +1,6 @@
 package com.example.gunlukis.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -8,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.gunlukis.R
+import com.example.gunlukis.activities.MainActivity
 import com.example.gunlukis.databinding.FragmentPostJobBinding
 import com.example.gunlukis.databinding.FragmentProfileBinding
 import com.example.gunlukis.models.PostJob
 import com.example.gunlukis.models.User
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -69,11 +73,12 @@ class PostJobFragment : Fragment() {
                 postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
                 postJobMap["uid"] = currentId
                 postJobMap["postId"] = uuid.toString()
+                postJobMap["isAdresi"] = binding.isYeriId.text.toString()
+                postJobMap["calismaSaati"] = binding.isSaatiId.text.toString()
 
                 val postRef = database.reference.child("PostJob")
                 postRef.child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
                     if (task.isSuccessful){
-                        Toast.makeText(requireContext(),"Basarili",Toast.LENGTH_LONG).show()
                         saveMyJobs()
 
                     }else{
@@ -95,11 +100,14 @@ class PostJobFragment : Fragment() {
         postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
         postJobMap["uid"] = currentId
         postJobMap["postId"] = uuid.toString()
+        postJobMap["isAdresi"] = binding.isYeriId.text.toString()
+        postJobMap["calismaSaati"] = binding.isSaatiId.text.toString()
 
         val myPostRef = database.reference.child("myPostJob")
         myPostRef.child(auth.currentUser!!.uid.toString()).child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
             if (task.isSuccessful){
-                Toast.makeText(requireContext(),"Basarili",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),"ilan yayınlandı",Toast.LENGTH_LONG).show()
+               startActivity(Intent(requireContext(),MainActivity::class.java))
             }else{
                 Toast.makeText(requireContext(),"Hata",Toast.LENGTH_LONG).show()
 

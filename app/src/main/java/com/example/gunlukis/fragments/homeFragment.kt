@@ -1,5 +1,6 @@
 package com.example.gunlukis.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -48,7 +49,6 @@ class homeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding?.root
 
-
         postJobList = ArrayList()
         val fragmentmanager = fragmentManager
         jobAdapter = JobAdapter(postJobList,fragmentmanager!!)
@@ -61,6 +61,7 @@ class homeFragment : Fragment() {
         binding?.homeFragmentRecyclirview?.layoutManager = linearLayoutManager
         binding?.homeFragmentRecyclirview?.adapter = jobAdapter
 
+        jobAdapter.notifyDataSetChanged()
         BossUsers()
         WorkersUsers()
         return binding?.root
@@ -106,6 +107,7 @@ class homeFragment : Fragment() {
             .child("myPostJob")
             .child(auth.currentUser!!.uid)
         postRef.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
 
@@ -115,7 +117,8 @@ class homeFragment : Fragment() {
                         val postList = snap.getValue<PostJob>(PostJob::class.java)
 
                         postList.let {
-                                postJobList.add(postList!!)
+                            it?.worker = false
+                                postJobList.add(it!!)
 
 
                         }
@@ -180,7 +183,9 @@ class homeFragment : Fragment() {
                     for (snap in snapshot.children){
                         val postList = snap.getValue<PostJob>(PostJob::class.java)
                         postList.let {
-                            postJobList.add(postList!!)
+                            it?.worker = true
+                            println("homeIlanYeri ${it?.isAdresi}")
+                            postJobList.add(it!!)
 
                         }
 
