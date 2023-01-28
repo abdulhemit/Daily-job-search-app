@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="pickColor">#273746</color>
     <color name="tansparentColor">#00FFFFFF</color>
+    <color name="text">#D5D8DC</color>
 </resources>

@@ -6,7 +6,7 @@ data class PostJob(
     var ilanAciklama : String? = null,
     var postId : String? = null,
     var uid : String? = null,
-    var isAdresi : String? = null,
+    var isYeri : String? = null,
     var calismaSaati : String? = null
 ){
     var worker : Boolean? = null

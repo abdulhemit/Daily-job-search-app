@@ -100,7 +100,7 @@ class PostJobFragment : Fragment() {
         postJobMap["ilanAciklama"] = binding.isAciklamaId.text.toString()
         postJobMap["uid"] = currentId
         postJobMap["postId"] = uuid.toString()
-        postJobMap["isAdresi"] = binding.isYeriId.text.toString()
+        postJobMap["isYeri"] = binding.isYeriId.text.toString()
         postJobMap["calismaSaati"] = binding.isSaatiId.text.toString()
 
         val myPostRef = database.reference.child("myPostJob")

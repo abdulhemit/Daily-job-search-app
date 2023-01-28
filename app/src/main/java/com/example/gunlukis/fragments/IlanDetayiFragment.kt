@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.SharedElementCallback
 import com.example.gunlukis.R
+import com.example.gunlukis.activities.ChatActivity
 import com.example.gunlukis.activities.MainActivity
 import com.example.gunlukis.databinding.FragmentHomeBinding
 import com.example.gunlukis.databinding.FragmentIlanDetayiBinding
@@ -70,6 +71,12 @@ class IlanDetayiFragment : Fragment() {
         binding?.ilaniSil?.setOnClickListener {
             deletePostJob()
             deletePostMYJob()
+        }
+        binding?.idMesajAt?.setOnClickListener {
+            val intent = Intent(requireContext(),ChatActivity::class.java)
+            intent.putExtra("chatID",userId)
+            startActivity(intent)
+
         }
 
         getBossId()
@@ -139,19 +146,49 @@ class IlanDetayiFragment : Fragment() {
                     val postjob = snapshot.getValue<PostJob>(PostJob::class.java)
                     postjob.let {
 
-                        binding?.isIlaniId?.setText(postjob?.ilanAdi)
-                        binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
-                        binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
-                        binding?.isYeriId?.setText(postjob?.isAdresi)
-                        println("isAdresi ${binding?.isYeriId?.setText(postjob?.isAdresi)}")
-                        binding?.isSaati?.setText(postjob?.calismaSaati)
+
 
                         if (workerInfo == true){
                             binding?.CardviewYayin?.visibility = View.VISIBLE
                             binding?.CardviewSil?.visibility = View.GONE
+
+                            binding?.isIlaniId?.setText(postjob?.ilanAdi)
+                            binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
+                            binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
+                            binding?.isSaati?.setText(postjob?.calismaSaati)
+                            if (postjob?.isYeri != null){
+
+                                binding?.isYeriId?.setText(postjob.isYeri)
+
+                            }else{
+
+                                binding?.isYeriId?.setText("Yer balirtilmedi")
+                                binding?.isYeriId?.setTextColor(resources.getColor(R.color.text))
+
+                            }
+
+
+
+
                         }else{
                             binding?.CardviewYayin?.visibility = View.GONE
                             binding?.CardviewSil?.visibility = View.VISIBLE
+
+                            binding?.isIlaniId?.setText(postjob?.ilanAdi)
+                            binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
+                            binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
+                            binding?.isSaati?.setText(postjob?.calismaSaati)
+                            if (postjob?.isYeri != null){
+
+                                binding?.isYeriId?.setText(postjob.isYeri)
+
+                            }else{
+                                binding?.isYeriId?.setText("Yer balirtilmedi")
+                                binding?.isYeriId?.setTextColor(resources.getColor(R.color.text))
+
+                            }
+
+
                         }
 
                     }
@@ -201,7 +238,7 @@ class IlanDetayiFragment : Fragment() {
                 if (snapshot.exists()){
 
 
-                        var user = snapshot.getValue(User::class.java)
+                        val user = snapshot.getValue(User::class.java)
                         user.let {
                             binding?.yayinciId?.setText(it?.userName)
                             Picasso.get().load(it?.image).into(binding?.ilanDetayiImage)
