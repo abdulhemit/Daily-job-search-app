@@ -136,7 +136,7 @@ class isAriyorumGiris : AppCompatActivity() {
         userMap["uid"] = currentUserId
         userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
         userMap["eMail"] = binding.singUpEMail.text.toString()
-        userMap["onYazi"] = "Günlül iş arama uygulaması kullanıyorum"
+        userMap["onYazi"] = "Günlük iş arama uygulaması kullanıyorum"
         userMap["image"] = "https://firebasestorage.googleapis.com/v0/b/gunlukhizmet.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=16557ef4-02b0-4f16-81b1-735bb424cc0a"
 
        usersRaf.child(currentUserId).setValue(userMap)

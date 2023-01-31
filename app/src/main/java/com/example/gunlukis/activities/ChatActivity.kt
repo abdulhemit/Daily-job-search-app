@@ -1,14 +1,13 @@
 package com.example.gunlukis.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.databinding.ActivityChatBinding
-import com.example.gunlukis.models.PostJob
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
 import com.google.firebase.auth.FirebaseAuth
@@ -162,6 +161,14 @@ class ChatActivity : AppCompatActivity() {
                     .addOnCompleteListener {
                         if (it.isSuccessful){
                             binding.idMessageText.setText("")
+                            val bossMap = HashMap<String,Any>()
+                            bossMap["BossId"] = bosschatID
+                           database.reference.child("BossId").child(bosschatID).setValue(bossMap)
+                               .addOnCompleteListener { task->
+                                   if (task.isSuccessful){
+                                       binding.idMessageText.setText("")
+                                   }
+                               }
                         }
                     }
 
@@ -265,9 +272,7 @@ class ChatActivity : AppCompatActivity() {
                     for (snap in snapshot.children){
                         snap.key?.let { (bossList as ArrayList<String>).add(it) }
 
-
                     }
-
 
                 }
             }

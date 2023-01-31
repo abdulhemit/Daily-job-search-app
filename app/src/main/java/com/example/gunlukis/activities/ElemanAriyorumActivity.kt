@@ -10,7 +10,10 @@ import android.widget.Toast
 import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityElemanAriyorumBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class elemanAriyorumActivity : AppCompatActivity() {
     private lateinit var binding: ActivityElemanAriyorumBinding
@@ -47,10 +50,32 @@ class elemanAriyorumActivity : AppCompatActivity() {
             if (binding.SingUpLayout.visibility == View.VISIBLE && binding.loginLayout.visibility == View.GONE){
                 CreatAccount()
             }else{
-                loginUser()
+                getBossEmail()
             }
         }
 
+
+    }
+    private fun getBossEmail(){
+
+        val emailRaf = database.reference.child("bossesEmail")
+            .addValueEventListener(object :ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+
+                        for (snap in snapshot.children){
+                            val email = snapshot.getValue()
+                        }
+
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
 
     }
 
@@ -93,7 +118,6 @@ class elemanAriyorumActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG).show()
             TextUtils.isEmpty(binding.SingUPPasswords01.text) -> Toast.makeText(this,"Şifre gerekli",
                 Toast.LENGTH_LONG).show()
-            //TextUtils.equals(binding.SingUpPasswords.text,binding.SingUPPasswords01.text) -> Toast.makeText(this,"Şifre aynı değil!",Toast.LENGTH_LONG).show()
 
             else -> {
                 if (binding.SingUpPasswords.text.toString() == binding.SingUPPasswords01.text.toString()){
@@ -136,15 +160,13 @@ class elemanAriyorumActivity : AppCompatActivity() {
         userMap["uid"] = currentUserId
         userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
         userMap["eMail"] = binding.singUpEMail.text.toString()
-        userMap["onYazi"] = "Günlül eleman arama uygulaması kullanıyorum"
+        userMap["onYazi"] = "Günlük eleman arama uygulaması kullanıyorum"
         userMap["image"] = "https://firebasestorage.googleapis.com/v0/b/gunlukhizmet.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=16557ef4-02b0-4f16-81b1-735bb424cc0a"
 
         usersRaf.child(currentUserId).setValue(userMap)
             .addOnCompleteListener { task->
                 if (task.isSuccessful){
-                    progressDialog.dismiss()
-                    startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
-                    finish()
+                    saveBossEmail(binding.singUpEMail.text.toString(),progressDialog)
 
                 }else{
                     val message = task.exception.toString()
@@ -156,5 +178,22 @@ class elemanAriyorumActivity : AppCompatActivity() {
             }
 
 
+    }
+    private fun saveBossEmail(email: String,progressDialog: ProgressDialog){
+
+        val emailRaf = database.reference.child("bossesEmail")
+        val emailMap = HashMap<String,Any>()
+        emailMap["email"] = email
+
+        emailRaf.setValue(emailRaf)
+            .addOnCompleteListener { task->
+                if (task.isSuccessful){
+
+                    progressDialog.dismiss()
+                    startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
+                    finish()
+
+                }
+            }
     }
 }

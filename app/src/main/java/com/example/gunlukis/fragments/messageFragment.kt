@@ -1,60 +1,112 @@
 package com.example.gunlukis.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.gunlukis.R
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gunlukis.adapter.ChatActivityAdapter
+import com.example.gunlukis.adapter.UserAdapter
+import com.example.gunlukis.databinding.FragmentMessageBinding
+import com.example.gunlukis.models.BossId
+import com.example.gunlukis.models.User
+import com.example.gunlukis.models.chat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.squareup.picasso.Picasso
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [messageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class messageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding : FragmentMessageBinding? = null
+    private val binding get() = _binding
+    private lateinit var database: FirebaseDatabase
+    private lateinit var auth: FirebaseAuth
+    private lateinit var chatList: MutableList<chat>
+    private lateinit var userList: MutableList<User>
+    private lateinit var userAdapter: UserAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        database = FirebaseDatabase.getInstance()
+        auth = FirebaseAuth.getInstance()
+        chatList = ArrayList()
+
+
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false)
+        _binding = FragmentMessageBinding.inflate(inflater, container, false)
+        val view = binding?.root
+        userList = ArrayList()
+        userAdapter = UserAdapter(userList)
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        binding?.RecyclerviewFragmentMessage?.layoutManager = linearLayoutManager
+        binding?.RecyclerviewFragmentMessage?.adapter = userAdapter
+
+        getBossId()
+        return binding?.root
+    }
+    private fun getBossId(){
+        database.reference.child("BossId")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        for (snap in snapshot.children){
+                            val bossid = snap.getValue<BossId>(BossId::class.java)
+                            bossid.let {
+                                getBoosId(bossid?.BossId!!)
+                            }
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment messageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            messageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
+
+    private fun getBoosId(id: String){
+
+        val usersRaf = database.reference.child("bosses").child(id)
+        usersRaf.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userList.clear()
+                if (snapshot.exists()){
+
+                        val user = snapshot.getValue<User>(User::class.java)
+                        user.let {
+                            userList.add(it!!)
+
+                        }
+
+                    userAdapter.notifyDataSetChanged()
+
                 }
             }
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+
     }
+
+
 }

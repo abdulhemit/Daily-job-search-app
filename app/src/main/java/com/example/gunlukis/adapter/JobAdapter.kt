@@ -14,7 +14,7 @@ class JobAdapter(val postJob: List<PostJob>,val fragmentManager: FragmentManager
     class JobHolder(val binding: ItemJobBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobHolder {
-        var binding = ItemJobBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemJobBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return JobHolder(binding)
     }
 
