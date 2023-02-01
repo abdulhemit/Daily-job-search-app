@@ -9,16 +9,21 @@ import android.view.View
 import android.widget.Toast
 import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityElemanAriyorumBinding
+import com.example.gunlukis.models.Email
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlin.properties.Delegates
 
 class elemanAriyorumActivity : AppCompatActivity() {
     private lateinit var binding: ActivityElemanAriyorumBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var emailList: MutableList<Email>
+    private var emailBoolean by Delegates.notNull<Boolean>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityElemanAriyorumBinding.inflate(layoutInflater)
@@ -26,6 +31,8 @@ class elemanAriyorumActivity : AppCompatActivity() {
         val view = binding
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        emailList = ArrayList()
+        emailBoolean = false
 
         binding.singUp.setOnClickListener {
             binding.singUp.background = resources.getDrawable(R.drawable.switch_trcks,null)
@@ -64,10 +71,25 @@ class elemanAriyorumActivity : AppCompatActivity() {
                     if (snapshot.exists()){
 
                         for (snap in snapshot.children){
-                            val email = snapshot.getValue()
+                            var email = snap.getValue<Email>(Email::class.java)
+                            email.let {
+                                emailList.add(email!!)
+                            }
+
+                        }
+                        for (email in (emailList as ArrayList)){
+
+                            if (email.email == binding.eMail.text.toString()){
+                                emailBoolean = true
+                                loginUser()
+
+                            }
                         }
 
+                        if (emailBoolean == false){
+                            Toast.makeText(this@elemanAriyorumActivity,"Email yada şifre yanlış",Toast.LENGTH_SHORT).show()
 
+                        }
                     }
                 }
 
@@ -87,8 +109,8 @@ class elemanAriyorumActivity : AppCompatActivity() {
 
             else -> {
                 val progressDialog = ProgressDialog(this@elemanAriyorumActivity)
-                progressDialog.setTitle("Sing up")
-                progressDialog.setMessage("Please wait, This may take a while...")
+                progressDialog.setTitle("Giriş yap")
+                progressDialog.setMessage("Lütfen bekleyin, Bu biraz zaman alabilir...")
                 progressDialog.setCanceledOnTouchOutside(false)
                 progressDialog.show()
 
@@ -123,8 +145,8 @@ class elemanAriyorumActivity : AppCompatActivity() {
                 if (binding.SingUpPasswords.text.toString() == binding.SingUPPasswords01.text.toString()){
 
                     val progressDialog = ProgressDialog(this@elemanAriyorumActivity)
-                    progressDialog.setTitle("Sing up")
-                    progressDialog.setMessage("Please wait, This may take a while...")
+                    progressDialog.setTitle("Üye Ol")
+                    progressDialog.setMessage("Lütfen bekleyin, Bu biraz zaman alabilir...")
                     progressDialog.setCanceledOnTouchOutside(false)
                     progressDialog.show()
 
@@ -185,10 +207,9 @@ class elemanAriyorumActivity : AppCompatActivity() {
         val emailMap = HashMap<String,Any>()
         emailMap["email"] = email
 
-        emailRaf.setValue(emailRaf)
+        emailRaf.push().setValue(emailMap)
             .addOnCompleteListener { task->
                 if (task.isSuccessful){
-
                     progressDialog.dismiss()
                     startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
                     finish()

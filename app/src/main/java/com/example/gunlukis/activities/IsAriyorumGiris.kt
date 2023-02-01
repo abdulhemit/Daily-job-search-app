@@ -9,14 +9,21 @@ import android.view.View
 import android.widget.Toast
 import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityIsAriyorumGirisBinding
+import com.example.gunlukis.models.Email
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlin.properties.Delegates
 
 
 class isAriyorumGiris : AppCompatActivity() {
     private lateinit var binding: ActivityIsAriyorumGirisBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var emailList: MutableList<Email>
+    private var emailBoolean by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +32,8 @@ class isAriyorumGiris : AppCompatActivity() {
         val view = binding
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        emailList = ArrayList()
+        emailBoolean = false
 
         //bosses
 
@@ -51,9 +60,47 @@ class isAriyorumGiris : AppCompatActivity() {
             if (binding.SingUpLayout.visibility == View.VISIBLE && binding.loginLayout.visibility == View.GONE){
                 CreatAccount()
             }else{
-                loginUser()
+                getWorkersEmail()
             }
         }
+
+    }
+
+    private fun getWorkersEmail(){
+
+        val emailRaf = database.reference.child("workersEmail")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+
+                        for (snap in snapshot.children){
+                            var email = snap.getValue<Email>(Email::class.java)
+                            email.let {
+                                emailList.add(email!!)
+                            }
+
+                        }
+                        for (email in (emailList as ArrayList)){
+
+                            if (email.email == binding.eMail.text.toString()){
+                                emailBoolean = true
+                                loginUser()
+
+                            }
+                        }
+
+                        if (emailBoolean == false){
+                            Toast.makeText(this@isAriyorumGiris,"Email yada şifre yanlış",Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
 
     }
 
@@ -142,9 +189,8 @@ class isAriyorumGiris : AppCompatActivity() {
        usersRaf.child(currentUserId).setValue(userMap)
            .addOnCompleteListener { task->
                if (task.isSuccessful){
-                   progressDialog.dismiss()
-                   startActivity(Intent(this@isAriyorumGiris, MainActivity::class.java))
-                   finish()
+
+                   saveWorkerEmail(binding.singUpEMail.text.toString(),progressDialog)
 
                }else{
                    val message = task.exception.toString()
@@ -156,6 +202,23 @@ class isAriyorumGiris : AppCompatActivity() {
            }
 
 
+    }
+
+    private fun saveWorkerEmail(email: String,progressDialog: ProgressDialog){
+
+        val emailRaf = database.reference.child("workersEmail")
+        val emailMap = HashMap<String,Any>()
+        emailMap["email"] = email
+
+        emailRaf.push().setValue(emailMap)
+            .addOnCompleteListener { task->
+                if (task.isSuccessful){
+                    progressDialog.dismiss()
+                    startActivity(Intent(this@isAriyorumGiris, MainActivity::class.java))
+                    finish()
+
+                }
+            }
     }
 
 
