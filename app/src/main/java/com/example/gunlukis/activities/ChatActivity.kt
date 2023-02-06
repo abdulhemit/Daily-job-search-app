@@ -78,7 +78,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun getWorkerChatMessage(){
-        database.reference.child("Chats").child(auth.currentUser!!.uid)
+        database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -133,7 +133,7 @@ class ChatActivity : AppCompatActivity() {
                 chatMap["chat"] = binding.idMessageText.text.toString()
                 chatMap["time"] = FieldValue.serverTimestamp().toString()
 
-                database.reference.child("Chats").child(auth.currentUser!!.uid).push().setValue(chatMap)
+                database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID).push().setValue(chatMap)
                     .addOnCompleteListener {
                         if (it.isSuccessful){
                             bossputChats()
@@ -157,7 +157,7 @@ class ChatActivity : AppCompatActivity() {
                 chatMap["chat"] = binding.idMessageText.text.toString()
                 chatMap["time"] = FieldValue.serverTimestamp().toString()
 
-                database.reference.child("Chats").child(bosschatID).push().setValue(chatMap)
+                database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(chatMap)
                     .addOnCompleteListener {
                         if (it.isSuccessful){
                             binding.idMessageText.setText("")

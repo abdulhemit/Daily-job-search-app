@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.gunlukis.R
 import com.example.gunlukis.databinding.ActivityElemanAriyorumBinding
 import com.example.gunlukis.models.Email
+import com.google.common.base.MoreObjects.ToStringHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -153,11 +154,10 @@ class elemanAriyorumActivity : AppCompatActivity() {
                     auth.createUserWithEmailAndPassword(binding.singUpEMail.text.toString(),binding.SingUpPasswords.text.toString())
                         .addOnCompleteListener { task->
                             if (task.isSuccessful){
+                                Toast.makeText(this@elemanAriyorumActivity,"kayt basarili",Toast.LENGTH_SHORT).show()
 
                                 SaveUserInfo(progressDialog)
-
                             }else{
-
                                 val message = task.exception.toString()
                                 Toast.makeText(this,"Error: $message", Toast.LENGTH_LONG).show()
                                 auth.signOut()
@@ -176,28 +176,34 @@ class elemanAriyorumActivity : AppCompatActivity() {
     }
 
     private fun SaveUserInfo(progressDialog: ProgressDialog) {
-        val currentUserId = auth.currentUser!!.uid
-        val usersRaf = database.reference.child("bosses")
-        val userMap = HashMap<String,Any>()
-        userMap["uid"] = currentUserId
-        userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
-        userMap["eMail"] = binding.singUpEMail.text.toString()
-        userMap["onYazi"] = "Günlük eleman arama uygulaması kullanıyorum"
-        userMap["image"] = "https://firebasestorage.googleapis.com/v0/b/gunlukhizmet.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=16557ef4-02b0-4f16-81b1-735bb424cc0a"
+        auth.currentUser?.uid.let {
+            val currentUserId = auth.currentUser?.uid
+            val usersRaf = database.reference.child("bosses")
+            val userMap = HashMap<String,Any>()
+            userMap["uid"] = currentUserId.toString()
+            userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
+            userMap["eMail"] = binding.singUpEMail.text.toString()
+            userMap["onYazi"] = "Günlük eleman arama uygulaması kullanıyorum"
+            userMap["image"] = "https://firebasestorage.googleapis.com/v0/b/gunlukhizmet.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=16557ef4-02b0-4f16-81b1-735bb424cc0a"
 
-        usersRaf.child(currentUserId).setValue(userMap)
-            .addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    saveBossEmail(binding.singUpEMail.text.toString(),progressDialog)
+            usersRaf.child(currentUserId.toString()).setValue(userMap)
+                .addOnCompleteListener { task->
+                    if (task.isSuccessful){
 
-                }else{
-                    val message = task.exception.toString()
-                    Toast.makeText(this,"Error: $message", Toast.LENGTH_LONG).show()
-                    progressDialog.dismiss()
-                    auth.signOut()
+                        Toast.makeText(this@elemanAriyorumActivity,"kullanici bilgileri kaydi basarili",Toast.LENGTH_LONG).show()
+                        saveBossEmail(binding.singUpEMail.text.toString(),progressDialog)
+
+                    }else{
+                        val message = task.exception.toString()
+                        Toast.makeText(this,"Error: $message", Toast.LENGTH_LONG).show()
+                        println("hata" + message.toString())
+                        progressDialog.dismiss()
+                        auth.signOut()
+                    }
+
                 }
+        }
 
-            }
 
 
     }

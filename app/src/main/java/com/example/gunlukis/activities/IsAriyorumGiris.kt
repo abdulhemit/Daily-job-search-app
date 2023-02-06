@@ -73,6 +73,7 @@ class isAriyorumGiris : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()){
 
+
                         for (snap in snapshot.children){
                             var email = snap.getValue<Email>(Email::class.java)
                             email.let {
@@ -121,6 +122,7 @@ class isAriyorumGiris : AppCompatActivity() {
                     .addOnCompleteListener { task->
                         if(task.isSuccessful){
                             progressDialog.dismiss()
+                            Toast.makeText(this@isAriyorumGiris,"Giris basarili",Toast.LENGTH_LONG).show()
                             startActivity(Intent(this@isAriyorumGiris, MainActivity::class.java))
                             finish()
                         }else{
