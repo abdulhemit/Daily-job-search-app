@@ -72,7 +72,7 @@ class ChatActivityAdapter():RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>
         val userText = holder.itemView.findViewById<TextView>(R.id.chatText)
         val chatText = holder.itemView.findViewById<TextView>(R.id.chatTime)
         userText.setText(chatList.get(position).chat)
-        chatText.setText(chatList.get(position).time)
+
 
     }
 

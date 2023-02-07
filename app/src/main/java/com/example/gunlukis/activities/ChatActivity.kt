@@ -31,6 +31,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatList: MutableList<chat>
     private lateinit var chatActivityAdapter: ChatActivityAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -48,6 +49,8 @@ class ChatActivity : AppCompatActivity() {
         }
         chatActivityAdapter = ChatActivityAdapter()
         val linearLayoutManager = LinearLayoutManager(this)
+        //linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
         binding.ChatsRecyclerview.layoutManager = linearLayoutManager
         binding.ChatsRecyclerview.adapter = chatActivityAdapter
 
@@ -128,15 +131,58 @@ class ChatActivity : AppCompatActivity() {
 
             else->{
 
-                val chatMap = HashMap<String,Any>()
-                chatMap["uid"] = auth.currentUser!!.uid
-                chatMap["chat"] = binding.idMessageText.text.toString()
-                chatMap["time"] = FieldValue.serverTimestamp().toString()
+                val mesajText = binding.idMessageText.text.toString()
+                binding.idMessageText.setText("")
 
-                database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID).push().setValue(chatMap)
+                val mesajAtanMap = HashMap<String,Any>()
+                mesajAtanMap["uid"] = auth.currentUser!!.uid
+                mesajAtanMap["chat"] = mesajText
+                mesajAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                mesajAtanMap["goruldu"] = true
+                mesajAtanMap["type"] = "text"
+
+                database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID).push().setValue(mesajAtanMap)
                     .addOnCompleteListener {
                         if (it.isSuccessful){
-                            bossputChats()
+
+                            val mesajAlanMap = HashMap<String,Any>()
+                            mesajAlanMap["uid"] = bosschatID
+                            mesajAlanMap["chat"] = mesajText
+                            mesajAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                            mesajAlanMap["goruldu"] = false
+                            mesajAlanMap["type"] = "text"
+
+                            database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(mesajAlanMap)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful){
+
+                                        val konusmaAtanMap = HashMap<String,Any>()
+                                        konusmaAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                                        konusmaAtanMap["goruldu"] = true
+                                        konusmaAtanMap["son_mesaj"] = mesajText
+
+                                        database.reference.child("konusmalar").child(auth.currentUser!!.uid).child(bosschatID).setValue(konusmaAtanMap)
+                                            .addOnCompleteListener {
+                                                if(it.isSuccessful){
+
+                                                    val konusmaAlanMap = HashMap<String,Any>()
+                                                    konusmaAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                                                    konusmaAlanMap["goruldu"] = false
+                                                    konusmaAlanMap["son_mesaj"] = mesajText
+
+                                                    database.reference.child("konusmalar").child(bosschatID).child(auth.currentUser!!.uid).setValue(konusmaAlanMap)
+                                                        .addOnCompleteListener {
+                                                            if(it.isSuccessful){
+                                                                chatActivityAdapter.notifyDataSetChanged()
+                                                            }
+                                                        }
+
+
+                                                }
+                                            }
+
+                                    }
+                                }
                         }
                     }
 
@@ -156,6 +202,8 @@ class ChatActivity : AppCompatActivity() {
                 chatMap["uid"] = bosschatID
                 chatMap["chat"] = binding.idMessageText.text.toString()
                 chatMap["time"] = FieldValue.serverTimestamp().toString()
+                chatMap["goruldu"] = false
+                chatMap["type"] = "text"
 
                 database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(chatMap)
                     .addOnCompleteListener {
