@@ -1,26 +1,23 @@
 package com.example.gunlukis.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.adapter.UserAdapter
+import com.example.gunlukis.adapter.konusmalarAdapter
 import com.example.gunlukis.databinding.FragmentMessageBinding
-import com.example.gunlukis.models.BossId
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
+import com.example.gunlukis.models.konusmalar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
-import com.squareup.picasso.Picasso
+
 
 
 class messageFragment : Fragment() {
@@ -28,16 +25,16 @@ class messageFragment : Fragment() {
     private val binding get() = _binding
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
-    private lateinit var chatList: MutableList<chat>
+    private lateinit var konusmalarList: MutableList<konusmalar>
     private lateinit var userList: MutableList<User>
-    private lateinit var userAdapter: UserAdapter
+    private lateinit var konusmalaradapter: konusmalarAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
-        chatList = ArrayList()
+        konusmalarList = ArrayList()
 
 
 
@@ -51,26 +48,32 @@ class messageFragment : Fragment() {
         _binding = FragmentMessageBinding.inflate(inflater, container, false)
         val view = binding?.root
         userList = ArrayList()
-        userAdapter = UserAdapter(userList)
+        konusmalaradapter = konusmalarAdapter(konusmalarList)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding?.RecyclerviewFragmentMessage?.layoutManager = linearLayoutManager
-        binding?.RecyclerviewFragmentMessage?.adapter = userAdapter
+        binding?.RecyclerviewFragmentMessage?.adapter = konusmalaradapter
+        konusmalariGetirmek()
 
-        getBossId()
         return binding?.root
     }
-    private fun getBossId(){
-        database.reference.child("BossId")
+    private fun konusmalariGetirmek(){
+
+        database.reference.child("konusmalar").child(auth.currentUser!!.uid)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()){
+                    konusmalarList.clear()
+                    if(snapshot.exists()){
                         for (snap in snapshot.children){
-                            val bossid = snap.getValue<BossId>(BossId::class.java)
-                            bossid.let {
-                                getBoosId(bossid?.BossId!!)
-                            }
 
+                            var konusmalar = snap.getValue(konusmalar::class.java)
+                            konusmalar?.userId = snap.key
+                            konusmalar.let {
+                                konusmalarList.add(konusmalar!!)
+
+                            }
                         }
+                        konusmalaradapter.notifyDataSetChanged()
+
                     }
                 }
 
@@ -79,34 +82,7 @@ class messageFragment : Fragment() {
                 }
 
             })
-    }
-
-
-
-    private fun getBoosId(id: String){
-
-        val usersRaf = database.reference.child("bosses").child(id)
-        usersRaf.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-                if (snapshot.exists()){
-
-                        val user = snapshot.getValue<User>(User::class.java)
-                        user.let {
-                            userList.add(it!!)
-
-                        }
-
-                    userAdapter.notifyDataSetChanged()
-
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
 
     }
-
 
 }
