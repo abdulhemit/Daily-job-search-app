@@ -75,6 +75,7 @@ class IlanDetayiFragment : Fragment() {
         binding?.idMesajAt?.setOnClickListener {
             val intent = Intent(requireContext(),ChatActivity::class.java)
             intent.putExtra("chatID",userId)
+            intent.putExtra("workerId",auth.currentUser!!.uid)
             startActivity(intent)
 
         }

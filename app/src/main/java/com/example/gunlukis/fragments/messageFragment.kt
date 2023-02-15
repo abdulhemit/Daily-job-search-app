@@ -28,16 +28,14 @@ class messageFragment : Fragment() {
     private lateinit var konusmalarList: MutableList<konusmalar>
     private lateinit var userList: MutableList<User>
     private lateinit var konusmalaradapter: konusmalarAdapter
-
+    private lateinit var workerList: MutableList<User>
+    private lateinit var bossList: MutableList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
         konusmalarList = ArrayList()
-
-
-
 
     }
 
@@ -47,16 +45,17 @@ class messageFragment : Fragment() {
     ): View? {
         _binding = FragmentMessageBinding.inflate(inflater, container, false)
         val view = binding?.root
+        WorkersUsers()
+        BossUsers()
         userList = ArrayList()
         konusmalaradapter = konusmalarAdapter(konusmalarList)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding?.RecyclerviewFragmentMessage?.layoutManager = linearLayoutManager
         binding?.RecyclerviewFragmentMessage?.adapter = konusmalaradapter
-        konusmalariGetirmek()
 
         return binding?.root
     }
-    private fun konusmalariGetirmek(){
+    private fun konusmalariGetirmekWorker(){
 
         database.reference.child("konusmalar").child(auth.currentUser!!.uid)
             .addValueEventListener(object : ValueEventListener{
@@ -67,6 +66,7 @@ class messageFragment : Fragment() {
 
                             var konusmalar = snap.getValue(konusmalar::class.java)
                             konusmalar?.userId = snap.key
+                            konusmalar?.hangiKullanici = "worker"
                             konusmalar.let {
                                 konusmalarList.add(konusmalar!!)
 
@@ -83,6 +83,102 @@ class messageFragment : Fragment() {
 
             })
 
+    }
+
+    private fun konusmalariGetirmekBoss(){
+
+        database.reference.child("konusmalar").child(auth.currentUser!!.uid)
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    konusmalarList.clear()
+                    if(snapshot.exists()){
+                        for (snap in snapshot.children){
+
+                            var konusmalar = snap.getValue(konusmalar::class.java)
+                            konusmalar?.userId = snap.key
+                            konusmalar?.hangiKullanici = "boss"
+                            konusmalar.let {
+                                konusmalarList.add(konusmalar!!)
+
+                            }
+                        }
+                        konusmalaradapter.notifyDataSetChanged()
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+    }
+
+    private fun WorkersUsers() {
+
+        workerList = ArrayList()
+
+        val workers = FirebaseDatabase.getInstance().reference
+            .child("workers")
+
+
+        workers.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+
+                    for (snap in snapshot.children){
+                        snap.key?.let { (workerList as ArrayList<String>).add(it) }
+
+                    }
+                    for (id in (workerList as ArrayList<String>)){
+
+                        if (auth.currentUser?.uid == id){
+                            konusmalariGetirmekWorker()
+                        }
+                    }
+
+
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println( "hata" + error.message.toString())
+            }
+
+        })
+    }
+
+
+    private fun BossUsers() {
+
+        bossList = ArrayList()
+
+        val workers = FirebaseDatabase.getInstance().reference
+            .child("bosses")
+
+
+        workers.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+
+                    for (snap in snapshot.children){
+                        snap.key?.let { (bossList as ArrayList<String>).add(it) }
+                    }
+
+                    for (id in (bossList as ArrayList<String>)){
+
+                        if (auth.currentUser?.uid == id ){
+                            konusmalariGetirmekBoss()
+                        }
+                    }
+
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println( "hata" + error.message.toString())
+            }
+
+        })
     }
 
 }
