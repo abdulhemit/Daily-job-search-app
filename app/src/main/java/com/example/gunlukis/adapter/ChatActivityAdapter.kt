@@ -43,7 +43,8 @@ class ChatActivityAdapter():RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>
 
     override fun getItemViewType(position: Int): Int {
         val chat = chatList[position]
-        if(chat.uid == FirebaseAuth.getInstance().currentUser!!.uid){
+        val id = chatList[position].uid
+        if(chatList[position].uid == FirebaseAuth.getInstance().currentUser!!.uid){
 
             return VIEW_TYPE_MESSAGE_SEND
         }else{

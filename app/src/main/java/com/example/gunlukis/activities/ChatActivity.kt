@@ -50,6 +50,9 @@ class ChatActivity : AppCompatActivity() {
         bosschatID.let {
            getUserBossinfo(it)
         }
+        workerchatID.let {
+            getUserWorkerinfo(it)
+        }
 
         chatActivityAdapter = ChatActivityAdapter()
         val linearLayoutManager = LinearLayoutManager(this)
@@ -110,8 +113,52 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    private fun getBossChatMessage(){
+        database.reference.child("Chats").child(auth.currentUser!!.uid).child(workerchatID)
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    chatList.clear()
+
+                    for (snap in snapshot.children){
+                        val chat = snap.getValue<chat>(chat::class.java)
+                        chat.let {
+                            println("chat:" + chat?.chat)
+                            chatList.add(it!!)
+                            chatActivityAdapter.chatList = chatList
+                        }
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+    }
+
     private fun getUserBossinfo(chatID: String) {
         val usersRaf = database.reference.child("bosses").child(chatID)
+        usersRaf.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val user = snapshot.getValue<User>(User::class.java)
+                    user.let {
+                        binding.idChatName.text = it?.userName
+                        Picasso.get().load(it?.image).into(binding.idProfileChat)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+
+    }
+    private fun getUserWorkerinfo(chatID: String) {
+        val usersRaf = database.reference.child("workers").child(chatID)
         usersRaf.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -151,7 +198,7 @@ class ChatActivity : AppCompatActivity() {
                         if (it.isSuccessful){
 
                             val mesajAlanMap = HashMap<String,Any>()
-                            mesajAlanMap["uid"] = bosschatID
+                            mesajAlanMap["uid"] = auth.currentUser!!.uid
                             mesajAlanMap["chat"] = mesajText
                             mesajAlanMap["time"] = FieldValue.serverTimestamp().toString()
                             mesajAlanMap["goruldu"] = false
@@ -197,41 +244,6 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    /*
-    private fun bossputChats(){
-        when {
-            TextUtils.isEmpty(binding.idMessageText.text) -> Toast.makeText(this,"birşeyler yaz",Toast.LENGTH_LONG).show()
-
-            else->{
-
-                val chatMap = HashMap<String,Any>()
-                chatMap["uid"] = bosschatID
-                chatMap["chat"] = binding.idMessageText.text.toString()
-                chatMap["time"] = FieldValue.serverTimestamp().toString()
-                chatMap["goruldu"] = false
-                chatMap["type"] = "text"
-
-                database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(chatMap)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful){
-                            binding.idMessageText.setText("")
-                            val bossMap = HashMap<String,Any>()
-                            bossMap["BossId"] = bosschatID
-                           database.reference.child("BossId").child(bosschatID).setValue(bossMap)
-                               .addOnCompleteListener { task->
-                                   if (task.isSuccessful){
-                                       binding.idMessageText.setText("")
-                                   }
-                               }
-                        }
-                    }
-
-
-            }
-        }
-    }
-
-     */
     private fun CurrentBoosputChats(){
 
         when {
@@ -239,7 +251,8 @@ class ChatActivity : AppCompatActivity() {
 
             else->{
 
-                val mesajText = binding.idMessageText.text.toString()
+                val regex = Regex("")
+                val mesajText = binding.idMessageText.text.toString().replace(regex,"")
                 binding.idMessageText.setText("")
 
                 val mesajAtanMap = HashMap<String,Any>()
@@ -254,7 +267,7 @@ class ChatActivity : AppCompatActivity() {
                         if (it.isSuccessful){
 
                             val mesajAlanMap = HashMap<String,Any>()
-                            mesajAlanMap["uid"] = workerchatID
+                            mesajAlanMap["uid"] = auth.currentUser!!.uid
                             mesajAlanMap["chat"] = mesajText
                             mesajAlanMap["time"] = FieldValue.serverTimestamp().toString()
                             mesajAlanMap["goruldu"] = false
@@ -299,35 +312,6 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
-    /*
-    private fun workerputChats(){
-
-        when {
-            TextUtils.isEmpty(binding.idMessageText.text) -> Toast.makeText(this,"birşeyler yaz",Toast.LENGTH_LONG).show()
-
-            else->{
-
-                val chatMap = HashMap<String,Any>()
-                chatMap["uid"] = auth.currentUser!!.uid
-                chatMap["chat"] = binding.idMessageText.text.toString()
-                chatMap["time"] = FieldValue.serverTimestamp().toString()
-
-                database.reference.child("Chats").child(auth.currentUser!!.uid).push().setValue(chatMap)
-                    .addOnCompleteListener {
-                        if (it.isSuccessful){
-                            bossputChats()
-                        }
-                    }
-
-
-            }
-        }
-
-    }
-
-     */
-
-
 
 
 
@@ -378,6 +362,12 @@ class ChatActivity : AppCompatActivity() {
                     for (snap in snapshot.children){
                         snap.key?.let { (bossList as ArrayList<String>).add(it) }
 
+                    }
+                    for (id in (bossList as ArrayList<String>)){
+
+                        if (auth.currentUser?.uid == id){
+                            getBossChatMessage()
+                        }
                     }
 
                 }

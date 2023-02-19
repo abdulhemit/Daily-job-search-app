@@ -30,10 +30,16 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
         holder.itemView.setOnClickListener {
             if(konusmalarList[position].hangiKullanici == "worker"){
-
                 var intent = Intent(holder.itemView.context,ChatActivity::class.java)
                 intent.putExtra("chatID",konusmalarList[position].userId)
                 holder.itemView.context.startActivity(intent)
+
+            }
+            if (konusmalarList[position].hangiKullanici == "boss"){
+                var intent = Intent(holder.itemView.context,ChatActivity::class.java)
+                intent.putExtra("workerId",konusmalarList[position].userId)
+                holder.itemView.context.startActivity(intent)
+
             }
 
         }
