@@ -54,12 +54,14 @@ class ChatActivity : AppCompatActivity() {
             getUserWorkerinfo(it)
         }
 
-        chatActivityAdapter = ChatActivityAdapter()
+        chatActivityAdapter = ChatActivityAdapter(chatList)
         val linearLayoutManager = LinearLayoutManager(this)
         //linearLayoutManager.reverseLayout = true
         linearLayoutManager.stackFromEnd = true
         binding.ChatsRecyclerview.layoutManager = linearLayoutManager
         binding.ChatsRecyclerview.adapter = chatActivityAdapter
+
+
 
         binding.idBackChat.setOnClickListener {
             startActivity(Intent(this@ChatActivity, MainActivity::class.java))
@@ -99,10 +101,12 @@ class ChatActivity : AppCompatActivity() {
                         chat.let {
                             println("chat:" + chat?.chat)
                             chatList.add(it!!)
-                            chatActivityAdapter.chatList = chatList
+                            binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
                         }
 
                     }
+                    chatActivityAdapter.notifyDataSetChanged()
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -125,10 +129,13 @@ class ChatActivity : AppCompatActivity() {
                         chat.let {
                             println("chat:" + chat?.chat)
                             chatList.add(it!!)
-                            chatActivityAdapter.chatList = chatList
+                            chatActivityAdapter.notifyItemInserted(chatList.size -1)
+                            binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
+
                         }
 
                     }
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -251,8 +258,8 @@ class ChatActivity : AppCompatActivity() {
 
             else->{
 
-                val regex = Regex("")
-                val mesajText = binding.idMessageText.text.toString().replace(regex,"")
+                val message = binding.idMessageText.text.toString()
+                val mesajText = message.toString().replace('\n', 's').trim()//binding.idMessageText.text.toString().replace()
                 binding.idMessageText.setText("")
 
                 val mesajAtanMap = HashMap<String,Any>()

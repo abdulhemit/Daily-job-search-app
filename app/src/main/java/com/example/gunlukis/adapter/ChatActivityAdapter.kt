@@ -11,7 +11,7 @@ import com.example.gunlukis.R
 import com.example.gunlukis.models.chat
 import com.google.firebase.auth.FirebaseAuth
 
-class ChatActivityAdapter():RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>() {
+class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>() {
 
     val VIEW_TYPE_MESSAGE_SEND = 1
     val VIEW_TYPE_MESSAGE_RECEVIED = 2
@@ -37,7 +37,7 @@ class ChatActivityAdapter():RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>
     private val recyclerListDiffer = AsyncListDiffer(this,diffutil)
 
 
-    var chatList :  List<chat>
+     var chatList1 : List<chat>
         get() = recyclerListDiffer.currentList
         set(value) = recyclerListDiffer.submitList(value)
 
@@ -47,6 +47,7 @@ class ChatActivityAdapter():RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>
         if(chatList[position].uid == FirebaseAuth.getInstance().currentUser!!.uid){
 
             return VIEW_TYPE_MESSAGE_SEND
+
         }else{
             return VIEW_TYPE_MESSAGE_RECEVIED
 

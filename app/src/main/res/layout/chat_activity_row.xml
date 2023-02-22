@@ -27,6 +27,7 @@
                 android:background="@drawable/message_backround1"
                 android:padding="15sp"
                 android:text="mefrhaba"
+                android:maxWidth="300dp"
                 android:textColor="@color/pickColor"
                 android:textSize="25sp" />
             <TextView

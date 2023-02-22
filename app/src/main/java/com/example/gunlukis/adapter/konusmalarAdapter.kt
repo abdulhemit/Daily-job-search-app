@@ -27,7 +27,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: konusmalarHolder, position: Int) {
-        holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+        //holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
         holder.itemView.setOnClickListener {
             if(konusmalarList[position].hangiKullanici == "worker"){
                 var intent = Intent(holder.itemView.context,ChatActivity::class.java)
