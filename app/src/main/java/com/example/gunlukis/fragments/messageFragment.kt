@@ -55,6 +55,12 @@ class messageFragment : Fragment() {
 
         return binding?.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding?.RecyclerviewFragmentMessage?.recycledViewPool?.clear()
+        konusmalaradapter.notifyDataSetChanged()
+    }
     private fun konusmalariGetirmekWorker(){
 
         database.reference.child("konusmalar").child(auth.currentUser!!.uid)

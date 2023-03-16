@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
-   private lateinit var binding : ActivityMainBinding
+   private lateinit var binding : com.example.gunlukis.databinding.ActivityMainBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var workerList: MutableList<User>

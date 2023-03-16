@@ -1,13 +1,16 @@
 package com.example.gunlukis.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.databinding.ActivityChatBinding
+
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
 import com.google.firebase.auth.FirebaseAuth
@@ -18,10 +21,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
+import java.util.stream.IntStream
 
 
 class ChatActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityChatBinding
+    private lateinit var binding : com.example.gunlukis.databinding.ActivityChatBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var firestore: FirebaseFirestore
@@ -88,6 +92,12 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    override fun startActivity(intent: Intent?) {
+        super.startActivity(intent)
+        binding.ChatsRecyclerview.recycledViewPool.clear()
+        chatActivityAdapter.notifyDataSetChanged()
+    }
+
 
     private fun getWorkerChatMessage(){
         database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID)
@@ -129,12 +139,12 @@ class ChatActivity : AppCompatActivity() {
                         chat.let {
                             println("chat:" + chat?.chat)
                             chatList.add(it!!)
-                            chatActivityAdapter.notifyItemInserted(chatList.size -1)
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
 
                         }
 
                     }
+                    chatActivityAdapter.notifyDataSetChanged()
 
                 }
 
@@ -354,10 +364,13 @@ class ChatActivity : AppCompatActivity() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun BossUsers() {
 
-        bossList = ArrayList()
 
+
+
+        bossList = ArrayList()
         val workers = FirebaseDatabase.getInstance().reference
             .child("bosses")
 

@@ -184,7 +184,7 @@ class homeFragment : Fragment() {
                         val postList = snap.getValue<PostJob>(PostJob::class.java)
                         postList.let {
                             it?.worker = true
-                            println("homeIlanYeri ${it?.isYeri}")
+                            println("homeIlanYeri ${it?.isAdresi}")
                             postJobList.add(it!!)
 
                         }

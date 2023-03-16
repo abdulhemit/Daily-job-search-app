@@ -157,9 +157,9 @@ class IlanDetayiFragment : Fragment() {
                             binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
                             binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
                             binding?.isSaati?.setText(postjob?.calismaSaati)
-                            if (postjob?.isYeri != null){
+                            if (postjob?.isAdresi != null){
 
-                                binding?.isYeriId?.setText(postjob.isYeri)
+                                binding?.isYeriId?.setText(postjob.isAdresi)
 
                             }else{
 
@@ -179,9 +179,9 @@ class IlanDetayiFragment : Fragment() {
                             binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
                             binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
                             binding?.isSaati?.setText(postjob?.calismaSaati)
-                            if (postjob?.isYeri != null){
+                            if (postjob?.isAdresi != null){
 
-                                binding?.isYeriId?.setText(postjob.isYeri)
+                                binding?.isYeriId?.setText(postjob.isAdresi)
 
                             }else{
                                 binding?.isYeriId?.setText("Yer balirtilmedi")
