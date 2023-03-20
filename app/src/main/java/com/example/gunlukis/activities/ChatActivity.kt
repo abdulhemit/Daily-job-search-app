@@ -57,6 +57,9 @@ class ChatActivity : AppCompatActivity() {
         workerchatID.let {
             getUserWorkerinfo(it)
         }
+        var dizi = ArrayList<Int>()
+
+
 
         chatActivityAdapter = ChatActivityAdapter(chatList)
         val linearLayoutManager = LinearLayoutManager(this)
@@ -364,11 +367,9 @@ class ChatActivity : AppCompatActivity() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     private fun BossUsers() {
-
-
-
+        
 
         bossList = ArrayList()
         val workers = FirebaseDatabase.getInstance().reference

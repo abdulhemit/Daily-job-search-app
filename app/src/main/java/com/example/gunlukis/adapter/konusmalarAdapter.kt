@@ -27,7 +27,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: konusmalarHolder, position: Int) {
-        //holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+        holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
         holder.itemView.setOnClickListener {
             if(konusmalarList[position].hangiKullanici == "worker"){
                 var intent = Intent(holder.itemView.context,ChatActivity::class.java)
@@ -45,44 +45,23 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         }
         if (konusmalarList[position].hangiKullanici == "worker"){
 
-            sohbetEdilenKullanicininBilgileriniGetirBoss(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId)
+            sohbetEdilenKullanicininBilgileriniGetirBoss(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId,holder.binding.IdSonMesaj)
 
         }else{
-            sohbetEdilenKullanicininBilgileriniGetirWorker(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId)
+            sohbetEdilenKullanicininBilgileriniGetirWorker(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId,holder.binding.IdSonMesaj)
 
         }
     }
-
     override fun getItemCount(): Int {
         return konusmalarList.size
     }
-    private fun sohbetEdilenKullanicininBilgileriniGetirBoss(
-        userName: TextView,
-        userImage: CircleImageView,
-        userId: String?
-    ) {
-        val usersRaf = FirebaseDatabase.getInstance().reference.child("bosses").child(userId!!)
-        usersRaf.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    val user = snapshot.getValue<User>(User::class.java)
-                    user.let {
-                        userName.text= it?.userName
-                        Picasso.get().load(it?.image).into(userImage)
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
 
-
-        })
-    }
 
     private fun sohbetEdilenKullanicininBilgileriniGetirWorker(
         userName: TextView,
         userImage: CircleImageView,
-        userId: String?
+        userId: String?,
+        idSonMesaj: TextView
     ) {
         val usersRaf = FirebaseDatabase.getInstance().reference.child("workers").child(userId!!)
         usersRaf.addValueEventListener(object : ValueEventListener {
@@ -92,6 +71,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
                     user.let {
                         userName.text= it?.userName
                         Picasso.get().load(it?.image).into(userImage)
+                        //idSonMesaj.text = konusmalarLis
                     }
                 }
             }
@@ -101,5 +81,34 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
         })
     }
+
+    private fun sohbetEdilenKullanicininBilgileriniGetirBoss(
+        userName: TextView,
+        userImage: CircleImageView,
+        userId: String?,
+        idSonMesaj: TextView
+    ) {
+        val usersRaf = FirebaseDatabase.getInstance().reference.child("bosses").child(userId!!)
+        usersRaf.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val user = snapshot.getValue<User>(User::class.java)
+                    user.let {
+                        userName.text= it?.userName
+                        Picasso.get().load(it?.image).into(userImage)
+
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+
+        })
+    }
+
+
+
+
 
 }
