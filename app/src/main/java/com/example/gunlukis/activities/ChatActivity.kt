@@ -203,7 +203,8 @@ class ChatActivity : AppCompatActivity() {
 
             else->{
 
-                val mesajText = binding.idMessageText.text.toString()
+                val message = binding.idMessageText.text.toString()
+                val mesajText = message.toString().replace('\n', 's').trim()
                 binding.idMessageText.setText("")
 
                 val mesajAtanMap = HashMap<String,Any>()

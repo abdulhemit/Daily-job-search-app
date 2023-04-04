@@ -13,6 +13,7 @@ import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
 import com.example.gunlukis.models.konusmalar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -93,6 +94,7 @@ class messageFragment : Fragment() {
 
     private fun konusmalariGetirmekBoss(){
 
+        /*
         database.reference.child("konusmalar").child(auth.currentUser!!.uid)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -118,6 +120,41 @@ class messageFragment : Fragment() {
                 }
 
             })
+
+         */
+
+        konusmalarList.clear()
+        database.reference.child("konusmalar").child(auth.currentUser!!.uid).addChildEventListener(object : ChildEventListener{
+
+
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+                var konusmalar = snapshot.getValue(konusmalar::class.java)
+                konusmalar?.userId = snapshot.key
+                konusmalar?.hangiKullanici = "boss"
+                konusmalar.let {
+                    konusmalarList.add(konusmalar!!)
+
+                }
+                konusmalaradapter.notifyDataSetChanged()
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
 
     }
 
