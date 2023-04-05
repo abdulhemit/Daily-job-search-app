@@ -1,10 +1,18 @@
 package com.example.gunlukis.adapter
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Paint.Style
+import android.graphics.Typeface
+import android.media.Image
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gunlukis.R
 import com.example.gunlukis.activities.ChatActivity
 import com.example.gunlukis.databinding.KonusmalarListRowBinding
 import com.example.gunlukis.models.User
@@ -27,12 +35,31 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: konusmalarHolder, position: Int) {
-        holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+
+
+        if (konusmalarList.get(position).goruldu == false){
+
+            holder.binding.gorulduBilgisi.visibility = View.VISIBLE
+            holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+            holder.binding.IdSonMesaj.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.pickColor))
+
+
+
+        }else {
+            holder.binding.gorulduBilgisi.visibility = View.INVISIBLE
+            holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+            holder.binding.IdSonMesaj.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.gri))
+
+        }
+
+
+
         holder.itemView.setOnClickListener {
             if(konusmalarList[position].hangiKullanici == "worker"){
                 var intent = Intent(holder.itemView.context,ChatActivity::class.java)
                 intent.putExtra("chatID",konusmalarList[position].userId)
                 holder.itemView.context.startActivity(intent)
+
 
             }
             if (konusmalarList[position].hangiKullanici == "boss"){
@@ -48,7 +75,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
             sohbetEdilenKullanicininBilgileriniGetirBoss(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId,holder.binding.IdSonMesaj)
 
         }else{
-            sohbetEdilenKullanicininBilgileriniGetirWorker(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId,holder.binding.IdSonMesaj)
+            sohbetEdilenKullanicininBilgileriniGetirWorker(holder.binding.userName,holder.binding.userImage,konusmalarList[position].userId,holder.binding.IdSonMesaj,holder.itemView.context,holder.binding.gorulduBilgisi)
 
         }
     }
@@ -61,7 +88,9 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         userName: TextView,
         userImage: CircleImageView,
         userId: String?,
-        idSonMesaj: TextView
+        idSonMesaj: TextView,
+        context: Context,
+        gorulduBilgisi: ImageView
     ) {
         val usersRaf = FirebaseDatabase.getInstance().reference.child("workers").child(userId!!)
         usersRaf.addValueEventListener(object : ValueEventListener {

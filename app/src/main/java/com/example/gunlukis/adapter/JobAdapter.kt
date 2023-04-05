@@ -30,8 +30,7 @@ class JobAdapter(val postJob: List<PostJob>,val fragmentManager: FragmentManager
                 val bundle = Bundle()
                 val ilandetayiFragment = IlanDetayiFragment()
                 bundle.putString(/* key = */ "postId",/* value = */
-                    postJob[position].postId
-                )
+                    postJob[position].postId)
                 bundle.putString(/* key = */ "userId",/* value = */
                     postJob[position].uid
                 )

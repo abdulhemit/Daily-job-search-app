@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -210,7 +211,7 @@ class ChatActivity : AppCompatActivity() {
                 val mesajAtanMap = HashMap<String,Any>()
                 mesajAtanMap["uid"] = auth.currentUser!!.uid
                 mesajAtanMap["chat"] = mesajText
-                mesajAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                mesajAtanMap["time"] = ServerValue.TIMESTAMP
                 mesajAtanMap["goruldu"] = true
                 mesajAtanMap["type"] = "text"
 
@@ -221,7 +222,7 @@ class ChatActivity : AppCompatActivity() {
                             val mesajAlanMap = HashMap<String,Any>()
                             mesajAlanMap["uid"] = auth.currentUser!!.uid
                             mesajAlanMap["chat"] = mesajText
-                            mesajAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                            mesajAlanMap["time"] = ServerValue.TIMESTAMP
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
 
@@ -230,7 +231,7 @@ class ChatActivity : AppCompatActivity() {
                                     if (it.isSuccessful){
 
                                         val konusmaAtanMap = HashMap<String,Any>()
-                                        konusmaAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                                        konusmaAtanMap["time"] = ServerValue.TIMESTAMP
                                         konusmaAtanMap["goruldu"] = true
                                         konusmaAtanMap["son_mesaj"] = mesajText
 
@@ -239,7 +240,7 @@ class ChatActivity : AppCompatActivity() {
                                                 if(it.isSuccessful){
 
                                                     val konusmaAlanMap = HashMap<String,Any>()
-                                                    konusmaAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                                                    konusmaAlanMap["time"] = ServerValue.TIMESTAMP
                                                     konusmaAlanMap["goruldu"] = false
                                                     konusmaAlanMap["son_mesaj"] = mesajText
 
@@ -279,7 +280,7 @@ class ChatActivity : AppCompatActivity() {
                 val mesajAtanMap = HashMap<String,Any>()
                 mesajAtanMap["uid"] = auth.currentUser!!.uid
                 mesajAtanMap["chat"] = mesajText
-                mesajAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                mesajAtanMap["time"] = ServerValue.TIMESTAMP
                 mesajAtanMap["goruldu"] = true
                 mesajAtanMap["type"] = "text"
 
@@ -290,7 +291,7 @@ class ChatActivity : AppCompatActivity() {
                             val mesajAlanMap = HashMap<String,Any>()
                             mesajAlanMap["uid"] = auth.currentUser!!.uid
                             mesajAlanMap["chat"] = mesajText
-                            mesajAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                            mesajAlanMap["time"] = ServerValue.TIMESTAMP
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
 
@@ -299,7 +300,7 @@ class ChatActivity : AppCompatActivity() {
                                     if (it.isSuccessful){
 
                                         val konusmaAtanMap = HashMap<String,Any>()
-                                        konusmaAtanMap["time"] = FieldValue.serverTimestamp().toString()
+                                        konusmaAtanMap["time"] = ServerValue.TIMESTAMP
                                         konusmaAtanMap["goruldu"] = true
                                         konusmaAtanMap["son_mesaj"] = mesajText
 
@@ -308,7 +309,7 @@ class ChatActivity : AppCompatActivity() {
                                                 if(it.isSuccessful){
 
                                                     val konusmaAlanMap = HashMap<String,Any>()
-                                                    konusmaAlanMap["time"] = FieldValue.serverTimestamp().toString()
+                                                    konusmaAlanMap["time"] = ServerValue.TIMESTAMP
                                                     konusmaAlanMap["goruldu"] = false
                                                     konusmaAlanMap["son_mesaj"] = mesajText
 

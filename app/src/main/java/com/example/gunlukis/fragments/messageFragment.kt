@@ -62,8 +62,11 @@ class messageFragment : Fragment() {
         binding?.RecyclerviewFragmentMessage?.recycledViewPool?.clear()
         konusmalaradapter.notifyDataSetChanged()
     }
+
+
     private fun konusmalariGetirmekWorker(){
 
+        /*
         database.reference.child("konusmalar").child(auth.currentUser!!.uid)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -89,6 +92,42 @@ class messageFragment : Fragment() {
                 }
 
             })
+
+         */
+
+        konusmalarList.clear()
+        database.reference.child("konusmalar").child(auth.currentUser!!.uid).orderByChild("time").addChildEventListener(object : ChildEventListener{
+
+
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+                var konusmalar = snapshot.getValue(konusmalar::class.java)
+                konusmalar?.userId = snapshot.key
+                konusmalar?.hangiKullanici = "worker"
+                konusmalar.let {
+                    konusmalarList.add(0,konusmalar!!)
+
+                }
+                konusmalaradapter.notifyItemInserted(konusmalarList.size -1)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+
 
     }
 
@@ -124,7 +163,7 @@ class messageFragment : Fragment() {
          */
 
         konusmalarList.clear()
-        database.reference.child("konusmalar").child(auth.currentUser!!.uid).addChildEventListener(object : ChildEventListener{
+        database.reference.child("konusmalar").child(auth.currentUser!!.uid).orderByChild("time").addChildEventListener(object : ChildEventListener{
 
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -133,10 +172,10 @@ class messageFragment : Fragment() {
                 konusmalar?.userId = snapshot.key
                 konusmalar?.hangiKullanici = "boss"
                 konusmalar.let {
-                    konusmalarList.add(konusmalar!!)
+                    konusmalarList.add(0,konusmalar!!)
 
                 }
-                konusmalaradapter.notifyDataSetChanged()
+                konusmalaradapter.notifyItemInserted(konusmalarList.size -1)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {

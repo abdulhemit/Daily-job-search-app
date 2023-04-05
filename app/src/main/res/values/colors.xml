@@ -10,4 +10,5 @@
     <color name="pickColor">#273746</color>
     <color name="tansparentColor">#00FFFFFF</color>
     <color name="text">#D5D8DC</color>
+    <color name="gri">#9A9EA4 </color>
 </resources>
