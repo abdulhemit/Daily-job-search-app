@@ -1,5 +1,6 @@
 package com.example.gunlukis.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -60,6 +61,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.nav_messageWorker -> {
                         moveToFragment(messageFragment())
+                        /*val intent = Intent(this@MainActivity,test::class.java)
+                        startActivity(intent)
+
+                         */
+
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.nav_profileWorker -> {

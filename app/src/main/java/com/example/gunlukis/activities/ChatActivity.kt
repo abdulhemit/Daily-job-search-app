@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gunlukis.R
 import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.databinding.ActivityChatBinding
+import com.example.gunlukis.fragments.messageFragment
 
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
@@ -72,8 +74,7 @@ class ChatActivity : AppCompatActivity() {
 
 
         binding.idBackChat.setOnClickListener {
-            startActivity(Intent(this@ChatActivity, MainActivity::class.java))
-            finish()
+            onBackPressed()
         }
         binding.sendMessage.setOnClickListener {
 

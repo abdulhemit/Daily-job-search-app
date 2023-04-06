@@ -108,10 +108,28 @@ class messageFragment : Fragment() {
                     konusmalarList.add(0,konusmalar!!)
 
                 }
-                konusmalaradapter.notifyItemInserted(konusmalarList.size -1)
+                konusmalaradapter.notifyItemInserted(0)
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+                // kontrol -1 ise yeni bir konusma eklenecek, kontrol -1 degil ise var olan konusmanin positini guncellenecek
+                val kontrol = konusmaPositionBul(snapshot.key.toString())
+                if ( kontrol != -1){
+
+                    var guncellenecekKonusma = snapshot.getValue(konusmalar::class.java)
+                    guncellenecekKonusma?.userId = snapshot.key
+                    guncellenecekKonusma?.hangiKullanici = "worker"
+                    guncellenecekKonusma.let {
+                        konusmalarList.removeAt(kontrol)
+                        konusmalaradapter.notifyItemRemoved(kontrol)
+                        konusmalarList.add(0,guncellenecekKonusma!!)
+                        konusmalaradapter.notifyItemInserted(0)
+
+                    }
+
+                }
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -175,10 +193,40 @@ class messageFragment : Fragment() {
                     konusmalarList.add(0,konusmalar!!)
 
                 }
-                konusmalaradapter.notifyItemInserted(konusmalarList.size -1)
+                konusmalaradapter.notifyItemInserted(0)
+
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+                // kontrol -1 ise yeni bir konusma eklenecek, kontrol -1 degil ise var olan konusmanin positini guncellenecek
+                val kontrol = konusmaPositionBul(snapshot.key.toString())
+                if ( kontrol != -1){
+
+                    var guncellenecekKonusma = snapshot.getValue(konusmalar::class.java)
+                    guncellenecekKonusma?.userId = snapshot.key
+                    guncellenecekKonusma?.hangiKullanici = "boss"
+                    guncellenecekKonusma.let {
+                        konusmalarList.removeAt(kontrol)
+                        konusmalaradapter.notifyItemRemoved(kontrol)
+                        konusmalarList.add(0,guncellenecekKonusma!!)
+                        konusmalaradapter.notifyItemInserted(0)
+
+                    }
+
+                }
+/*
+                var guncellenecekKonusma = snapshot.getValue(konusmalar::class.java)
+                guncellenecekKonusma?.userId = snapshot.key
+                guncellenecekKonusma?.hangiKullanici = "boss"
+                guncellenecekKonusma.let {
+                    konusmalarList.add(0,guncellenecekKonusma!!)
+
+                }
+                konusmalaradapter.notifyItemInserted(konusmalarList.size -1)
+                konusmalaradapter.notifyDataSetChanged()
+
+ */
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -194,6 +242,20 @@ class messageFragment : Fragment() {
             }
 
         })
+
+    }
+    private fun konusmaPositionBul(UserId : String): Int {
+
+        for ( i in 0.. konusmalarList.size -1){
+
+            var gecici = konusmalarList.get(i)
+
+            if (gecici.userId!!.equals(UserId)){
+                return i
+            }
+
+        }
+        return - 1
 
     }
 
@@ -215,11 +277,10 @@ class messageFragment : Fragment() {
                     }
                     for (id in (workerList as ArrayList<String>)){
 
-                        if (auth.currentUser?.uid == id){
+                        if (auth.currentUser?.uid == id ){
                             konusmalariGetirmekWorker()
                         }
                     }
-
 
                 }
             }
@@ -262,5 +323,18 @@ class messageFragment : Fragment() {
 
         })
     }
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
+    }
+
+
 
 }

@@ -17,6 +17,7 @@ import com.example.gunlukis.activities.ChatActivity
 import com.example.gunlukis.databinding.KonusmalarListRowBinding
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.konusmalar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -55,17 +56,40 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
 
         holder.itemView.setOnClickListener {
+
             if(konusmalarList[position].hangiKullanici == "worker"){
-                var intent = Intent(holder.itemView.context,ChatActivity::class.java)
-                intent.putExtra("chatID",konusmalarList[position].userId)
-                holder.itemView.context.startActivity(intent)
+
+                FirebaseDatabase.getInstance().reference
+                    .child("konusmalar")
+                    .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .child(konusmalarList[position].userId.toString())
+                    .child("goruldu").setValue(true)
+                    .addOnCompleteListener {
+
+                        var intent = Intent(holder.itemView.context,ChatActivity::class.java)
+                        intent.putExtra("chatID",konusmalarList[position].userId)
+                        holder.itemView.context.startActivity(intent)
+                    }
+
+
 
 
             }
             if (konusmalarList[position].hangiKullanici == "boss"){
-                var intent = Intent(holder.itemView.context,ChatActivity::class.java)
-                intent.putExtra("workerId",konusmalarList[position].userId)
-                holder.itemView.context.startActivity(intent)
+
+                FirebaseDatabase.getInstance().reference
+                    .child("konusmalar")
+                    .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .child(konusmalarList[position].userId!!)
+                    .child("goruldu").setValue(true)
+                    .addOnCompleteListener {
+
+                        var intent = Intent(holder.itemView.context,ChatActivity::class.java)
+                        intent.putExtra("workerId",konusmalarList[position].userId)
+                        holder.itemView.context.startActivity(intent)
+                    }
+
+
 
             }
 
