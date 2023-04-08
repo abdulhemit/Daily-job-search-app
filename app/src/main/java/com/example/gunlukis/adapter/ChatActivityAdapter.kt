@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gunlukis.R
 import com.example.gunlukis.models.chat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatActivityAdapter.ChatHolder>() {
 
@@ -42,8 +43,7 @@ class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatA
         set(value) = recyclerListDiffer.submitList(value)
 
     override fun getItemViewType(position: Int): Int {
-        val chat = chatList[position]
-        val id = chatList[position].uid
+
         if(chatList[position].uid == FirebaseAuth.getInstance().currentUser!!.uid){
 
             return VIEW_TYPE_MESSAGE_SEND
@@ -76,7 +76,86 @@ class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatA
         userText.setText(chatList.get(position).chat)
 
 
+        if (chatList.get(position).whichUser == "Bosses"){
+            BossChatsonMesajGuncellenmesi(position,chatList[position].sonMesaj,chatList[position].konusulananKullaniciId)
+        }else{
+            WorkersChatsonMesajGuncellenmesi(position,chatList[position].sonMesaj,chatList[position].konusulananKullaniciId)
+        }
+
+
+
     }
+
+    private fun BossChatsonMesajGuncellenmesi(
+        position: Int,
+        sonMesaj: String?,
+        konusulananKullaniciId: String?
+    ) {
+        FirebaseDatabase.getInstance().reference
+            .child("konusmalar")
+            .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .child(chatList[position].konusulananKullaniciId.toString())
+            .addValueEventListener(object : ValueEventListener{
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val sonMesaj = snapshot.child("son_mesaj").value
+
+                    if ( sonMesaj == chatList[position].chat){
+                        FirebaseDatabase.getInstance().reference
+                            .child("konusmalar")
+                            .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                            .child(chatList[position].konusulananKullaniciId.toString())
+                            .child("goruldu")
+                            .setValue(true)
+
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+    }
+
+    private fun WorkersChatsonMesajGuncellenmesi(
+        position: Int,
+        sonMesaj: String?,
+        konusulananKullaniciId: String?
+    ) {
+        FirebaseDatabase.getInstance().reference
+            .child("konusmalar")
+            .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .child(chatList[position].konusulananKullaniciId.toString())
+            .addValueEventListener(object : ValueEventListener{
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val sonMesaj = snapshot.child("son_mesaj").value
+
+                    if ( sonMesaj == chatList[position].chat){
+                        FirebaseDatabase.getInstance().reference
+                            .child("konusmalar")
+                            .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                            .child(chatList[position].konusulananKullaniciId.toString())
+                            .child("goruldu")
+                            .setValue(true)
+
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+    }
+
 
     override fun getItemCount(): Int {
         return chatList.size

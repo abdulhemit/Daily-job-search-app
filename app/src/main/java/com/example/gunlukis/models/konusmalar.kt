@@ -5,6 +5,8 @@ data class konusmalar(
     var son_mesaj: String? = null,
     var time: Long? = null,
     var userId: String? = null,
-    var hangiKullanici: String? = null
+    var hangiKullanici: String? = null,
+
+
 ) {
 }

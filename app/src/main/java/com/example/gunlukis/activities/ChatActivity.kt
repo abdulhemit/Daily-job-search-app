@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import java.util.stream.IntStream
+import kotlin.properties.Delegates
 
 
 class ChatActivity : AppCompatActivity() {
@@ -54,13 +55,15 @@ class ChatActivity : AppCompatActivity() {
          bosschatID = intent.getStringExtra("chatID").toString()
          workerchatID = intent.getStringExtra("workerId").toString()
 
+
+
         bosschatID.let {
            getUserBossinfo(it)
         }
         workerchatID.let {
             getUserWorkerinfo(it)
         }
-        var dizi = ArrayList<Int>()
+
 
 
 
@@ -72,10 +75,12 @@ class ChatActivity : AppCompatActivity() {
         binding.ChatsRecyclerview.adapter = chatActivityAdapter
 
 
-
         binding.idBackChat.setOnClickListener {
             onBackPressed()
+
+
         }
+
         binding.sendMessage.setOnClickListener {
 
             for (id in (workerList as ArrayList<String>)){
@@ -115,6 +120,8 @@ class ChatActivity : AppCompatActivity() {
                         val chat = snap.getValue<chat>(chat::class.java)
                         chat.let {
                             println("chat:" + chat?.chat)
+                            it?.konusulananKullaniciId = bosschatID
+                            it?.whichUser = "Workers"
                             chatList.add(it!!)
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
                         }
@@ -142,14 +149,19 @@ class ChatActivity : AppCompatActivity() {
                     for (snap in snapshot.children){
                         val chat = snap.getValue<chat>(chat::class.java)
                         chat.let {
-                            println("chat:" + chat?.chat)
+                            it?.konusulananKullaniciId = workerchatID
+                            it?.whichUser = "Bosses"
                             chatList.add(it!!)
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
 
                         }
 
                     }
+
                     chatActivityAdapter.notifyDataSetChanged()
+
+
+
 
                 }
 
@@ -401,6 +413,12 @@ class ChatActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
 }
