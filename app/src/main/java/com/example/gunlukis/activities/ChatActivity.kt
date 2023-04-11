@@ -3,7 +3,12 @@ package com.example.gunlukis.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +26,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
@@ -32,6 +38,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var binding : com.example.gunlukis.databinding.ActivityChatBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var yaziyorDatabase: FirebaseDatabase
     private lateinit var firestore: FirebaseFirestore
     private lateinit var bosschatID: String
     private lateinit var workerchatID: String
@@ -48,6 +55,7 @@ class ChatActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        yaziyorDatabase = FirebaseDatabase.getInstance()
         chatList = ArrayList()
         WorkersUsers()
         BossUsers()
@@ -79,6 +87,7 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
 
 
+
         }
 
         binding.sendMessage.setOnClickListener {
@@ -98,6 +107,13 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+
+
+        if (FirebaseAuth.getInstance().currentUser?.uid == bosschatID){
+            textYaziyorKontrolBoss()
+        }else if (FirebaseAuth.getInstance().currentUser?.uid == workerchatID){
+            textYaziyorKontrolWorker()
+        }
 
 
     }
@@ -191,6 +207,7 @@ class ChatActivity : AppCompatActivity() {
         })
 
     }
+
     private fun getUserWorkerinfo(chatID: String) {
         val usersRaf = database.reference.child("workers").child(chatID)
         usersRaf.addValueEventListener(object : ValueEventListener {
@@ -247,6 +264,7 @@ class ChatActivity : AppCompatActivity() {
                                         konusmaAtanMap["time"] = ServerValue.TIMESTAMP
                                         konusmaAtanMap["goruldu"] = true
                                         konusmaAtanMap["son_mesaj"] = mesajText
+                                        konusmaAtanMap["typing"] =  false
 
                                         database.reference.child("konusmalar").child(auth.currentUser!!.uid).child(bosschatID).setValue(konusmaAtanMap)
                                             .addOnCompleteListener {
@@ -316,6 +334,7 @@ class ChatActivity : AppCompatActivity() {
                                         konusmaAtanMap["time"] = ServerValue.TIMESTAMP
                                         konusmaAtanMap["goruldu"] = true
                                         konusmaAtanMap["son_mesaj"] = mesajText
+                                        konusmaAtanMap["typing"] =  false
 
                                         database.reference.child("konusmalar").child(auth.currentUser!!.uid).child(workerchatID).setValue(konusmaAtanMap)
                                             .addOnCompleteListener {
@@ -325,6 +344,7 @@ class ChatActivity : AppCompatActivity() {
                                                     konusmaAlanMap["time"] = ServerValue.TIMESTAMP
                                                     konusmaAlanMap["goruldu"] = false
                                                     konusmaAlanMap["son_mesaj"] = mesajText
+                                                    //konusmaAlanMap["typing"] = false
 
                                                     database.reference.child("konusmalar").child(workerchatID).child(auth.currentUser!!.uid).setValue(konusmaAlanMap)
                                                         .addOnCompleteListener {
@@ -347,6 +367,117 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+    private fun textYaziyorKontrolBoss(){
+
+        binding.idMessageText.addTextChangedListener(object : TextWatcher{
+
+            var typing = false
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                if (!TextUtils.isEmpty(binding.idMessageText.text.toString()) && p0.toString().length == 1){
+                    typing = true
+                    Log.i("Kontrol: ","Kullanici yazmaya baslamis")
+                    yaziyorDatabase.reference.child("konusmalar")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .child(workerchatID)
+                        .child("typing")
+                        .setValue(true)
+
+                }else if(typing == true && p0.toString().length == 0){
+                    typing = false
+                    Log.i("Kontrol","Kullanici yazmayi birakmis")
+                    yaziyorDatabase.reference.child("konusmalar")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .child(workerchatID)
+                        .child("typing")
+                        .setValue(false)
+                }
+
+
+            }
+
+        })
+
+    }
+
+    private fun textYaziyorKontrolWorker(){
+
+        binding.idMessageText.addTextChangedListener(object : TextWatcher{
+
+            var typing = false
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                if (!TextUtils.isEmpty(binding.idMessageText.text.toString()) && p0.toString().length == 1){
+                    typing = true
+                    Log.i("Kontrol: ","Kullanici yazmaya baslamis")
+                    yaziyorDatabase.reference.child("konusmalar")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .child(bosschatID)
+                        .child("typing")
+                        .setValue(true)
+
+                }else if(typing == true && p0.toString().length == 0){
+                    typing = false
+                    Log.i("Kontrol","Kullanici yazmayi birakmis")
+                    yaziyorDatabase.reference.child("konusmalar")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .child(bosschatID)
+                        .child("typing")
+                        .setValue(false)
+                }
+
+
+            }
+
+        })
+
+    }
+
+    private var yaziyorEventListener = object : ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+
+            if(snapshot.getValue() != null){
+
+                if (snapshot.getValue() == true){
+                    Log.i("Kontrol"," deger true olmus")
+                    binding.textYaziyor.visibility = View.VISIBLE
+                    binding.textYaziyor.startAnimation(AnimationUtils.
+                    loadAnimation(this@ChatActivity,
+                        androidx.appcompat.R.anim.abc_fade_in))
+
+                }else if(snapshot.getValue() == false){
+                    Log.i("Kontrol"," deger false olmus")
+                    binding.textYaziyor.visibility = View.GONE
+                    binding.textYaziyor.startAnimation(AnimationUtils.
+                    loadAnimation(this@ChatActivity,
+                        androidx.appcompat.R.anim.abc_fade_out))
+
+                }
+            }
+
+
+
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
+
+    }
+
 
 
 
@@ -419,6 +550,60 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (FirebaseAuth.getInstance().currentUser?.uid == workerchatID){
+
+            yaziyorDatabase.reference.child("konusmalar")
+                .child(bosschatID)
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child("typing").addValueEventListener(yaziyorEventListener)
+
+        }else if (FirebaseAuth.getInstance().currentUser?.uid == bosschatID){
+
+            yaziyorDatabase.reference.child("konusmalar")
+                .child(workerchatID)
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child("typing").addValueEventListener(yaziyorEventListener)
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (FirebaseAuth.getInstance().currentUser?.uid == workerchatID){
+
+             yaziyorDatabase.reference.child("konusmalar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child(bosschatID)
+                .child("typing").setValue(false)
+
+            yaziyorDatabase.reference.child("konusmalar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child(bosschatID)
+                .child("typing").removeEventListener(yaziyorEventListener)
+
+
+
+        }else if (FirebaseAuth.getInstance().currentUser?.uid == bosschatID){
+
+            yaziyorDatabase.reference.child("konusmalar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child(workerchatID)
+                .child("typing").setValue(false)
+
+            yaziyorDatabase.reference.child("konusmalar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child(workerchatID)
+                .child("typing").removeEventListener(yaziyorEventListener)
+        }
+
     }
 
 }

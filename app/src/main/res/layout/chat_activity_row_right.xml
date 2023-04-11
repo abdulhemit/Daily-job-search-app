@@ -11,9 +11,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="100sp"
             android:orientation="vertical"
+            android:layout_marginEnd="4dp"
             >
 
             <TextView
@@ -27,7 +27,7 @@
                 android:layout_marginBottom="5dp"
                 android:maxWidth="250dp"
                 android:background="@drawable/message_backround"
-                android:padding="7sp"
+                android:padding="8sp"
                 android:paddingStart="10dp"
                 android:text="merhaba"
                 android:textColor="@color/white"
@@ -42,6 +42,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="2dp"
+                android:visibility="gone"
                 android:layout_marginBottom="2dp"
                 android:paddingEnd="15dp"
                 android:text="10 pm"

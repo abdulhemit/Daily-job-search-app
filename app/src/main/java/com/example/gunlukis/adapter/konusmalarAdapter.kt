@@ -2,9 +2,7 @@ package com.example.gunlukis.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint.Style
-import android.graphics.Typeface
-import android.media.Image
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +24,7 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapter<konusmalarAdapter.konusmalarHolder>() {
+
     class konusmalarHolder(var binding: KonusmalarListRowBinding):RecyclerView.ViewHolder(binding.root){
 
     }
@@ -41,14 +40,29 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         if (konusmalarList.get(position).goruldu == false){
 
             holder.binding.gorulduBilgisi.visibility = View.VISIBLE
-            holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+            var oankiKonusma = konusmalarList[position].son_mesaj?.toString()
+            if (oankiKonusma.toString().length> 20 ){
+                holder.binding.IdSonMesaj.setText(oankiKonusma.toString().trim().substring(0,20)+"...")
+            }else {
+                holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+            }
             holder.binding.IdSonMesaj.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.pickColor))
 
 
 
         }else {
+
             holder.binding.gorulduBilgisi.visibility = View.INVISIBLE
-            holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+
+            konusmalarList[position].son_mesaj?.toString()?.length.let {
+                var oankiKonusma = konusmalarList[position].son_mesaj?.toString()
+                if (oankiKonusma.toString().length > 20 ){
+                    holder.binding.IdSonMesaj.setText(oankiKonusma.toString().trim().substring(0,20)+"...")
+                }else {
+                    holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+                }
+            }
+
             holder.binding.IdSonMesaj.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.gri))
 
         }
@@ -68,6 +82,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
                         var intent = Intent(holder.itemView.context,ChatActivity::class.java)
                         intent.putExtra("chatID",konusmalarList[position].userId)
+                        intent.putExtra("workerId",FirebaseAuth.getInstance().currentUser!!.uid)
                         holder.itemView.context.startActivity(intent)
                     }
 
@@ -86,6 +101,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
                         var intent = Intent(holder.itemView.context,ChatActivity::class.java)
                         intent.putExtra("workerId",konusmalarList[position].userId)
+                        intent.putExtra("chatID",FirebaseAuth.getInstance().currentUser!!.uid)
                         holder.itemView.context.startActivity(intent)
                     }
 

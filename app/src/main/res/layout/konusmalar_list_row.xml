@@ -64,6 +64,7 @@
             android:layout_marginStart="6dp"
             android:text="4s"
             android:textSize="18sp"
+            android:visibility="gone"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/Id_sonMesaj"
             app:layout_constraintStart_toEndOf="@id/Id_sonMesaj"
