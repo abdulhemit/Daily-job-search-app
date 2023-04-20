@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.properties.Delegates
 
 
@@ -121,6 +122,7 @@ class isAriyorumGiris : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(binding.eMail.text.toString(),binding.passwords.text.toString())
                     .addOnCompleteListener { task->
                         if(task.isSuccessful){
+                            FcmTokenKaydet()
                             progressDialog.dismiss()
                             Toast.makeText(this@isAriyorumGiris,"Giris basarili",Toast.LENGTH_LONG).show()
                             startActivity(Intent(this@isAriyorumGiris, MainActivity::class.java))
@@ -134,6 +136,20 @@ class isAriyorumGiris : AppCompatActivity() {
                     }
             }
         }
+    }
+
+    private fun FcmTokenKaydet() {
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isSuccessful){
+                database.reference
+                    .child("workers")
+                    .child(auth.currentUser!!.uid)
+                    .child("fcm_token").setValue(it.result)
+            }
+        }
+
+
     }
 
     private fun CreatAccount() {

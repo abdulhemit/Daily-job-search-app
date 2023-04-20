@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.properties.Delegates
 
 class elemanAriyorumActivity : AppCompatActivity() {
@@ -118,6 +119,7 @@ class elemanAriyorumActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(binding.eMail.text.toString(),binding.passwords.text.toString())
                     .addOnCompleteListener { task->
                         if(task.isSuccessful){
+                            FcmTokenKaydet()
                             progressDialog.dismiss()
                             startActivity(Intent(this@elemanAriyorumActivity, MainActivity::class.java))
                             finish()
@@ -130,6 +132,18 @@ class elemanAriyorumActivity : AppCompatActivity() {
                     }
             }
         }
+    }
+
+    private fun FcmTokenKaydet() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+           if (it.isSuccessful){
+               database.reference
+                   .child("bosses")
+                   .child(auth.currentUser!!.uid)
+                   .child("fcm_token").setValue(it.result)
+           }
+       }
+
     }
 
     private fun CreatAccount() {

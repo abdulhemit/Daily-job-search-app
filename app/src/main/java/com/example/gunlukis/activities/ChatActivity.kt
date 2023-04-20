@@ -255,6 +255,7 @@ class ChatActivity : AppCompatActivity() {
                             mesajAlanMap["time"] = ServerValue.TIMESTAMP
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
+                            mesajAlanMap["mesaj_gonderilen_kisi"] = "Boss"
 
                             database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(mesajAlanMap)
                                 .addOnCompleteListener {
