@@ -172,7 +172,7 @@ class isAriyorumGiris : AppCompatActivity() {
                     auth.createUserWithEmailAndPassword(binding.singUpEMail.text.toString(),binding.SingUpPasswords.text.toString())
                         .addOnCompleteListener { task->
                             if (task.isSuccessful){
-
+                                FcmTokenKaydet()
                                 SaveUserInfo(progressDialog)
 
                             }else{

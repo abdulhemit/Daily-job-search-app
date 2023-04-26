@@ -245,6 +245,9 @@ class ChatActivity : AppCompatActivity() {
                 mesajAtanMap["goruldu"] = true
                 mesajAtanMap["type"] = "text"
 
+
+
+
                 database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID).push().setValue(mesajAtanMap)
                     .addOnCompleteListener {
                         if (it.isSuccessful){
@@ -255,7 +258,8 @@ class ChatActivity : AppCompatActivity() {
                             mesajAlanMap["time"] = ServerValue.TIMESTAMP
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
-                            mesajAlanMap["mesaj_gonderilen_kisi"] = "Boss"
+                            mesajAlanMap["kime_mesaj_gonderildi"] = "Boss"
+
 
                             database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(mesajAlanMap)
                                 .addOnCompleteListener {
@@ -266,6 +270,9 @@ class ChatActivity : AppCompatActivity() {
                                         konusmaAtanMap["goruldu"] = true
                                         konusmaAtanMap["son_mesaj"] = mesajText
                                         konusmaAtanMap["typing"] =  false
+                                        //konusmaAtanMap["mesajGonderilenKisi"] = "Boss"
+
+
 
                                         database.reference.child("konusmalar").child(auth.currentUser!!.uid).child(bosschatID).setValue(konusmaAtanMap)
                                             .addOnCompleteListener {
@@ -275,6 +282,8 @@ class ChatActivity : AppCompatActivity() {
                                                     konusmaAlanMap["time"] = ServerValue.TIMESTAMP
                                                     konusmaAlanMap["goruldu"] = false
                                                     konusmaAlanMap["son_mesaj"] = mesajText
+                                                    //konusmaAlanMap["mesajGonderilenKisi"] = "Boss"
+
 
                                                     database.reference.child("konusmalar").child(bosschatID).child(auth.currentUser!!.uid).setValue(konusmaAlanMap)
                                                         .addOnCompleteListener {
@@ -326,6 +335,7 @@ class ChatActivity : AppCompatActivity() {
                             mesajAlanMap["time"] = ServerValue.TIMESTAMP
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
+                            mesajAlanMap["kime_mesaj_gonderildi"] = "Worker"
 
                             database.reference.child("Chats").child(workerchatID).child(auth.currentUser!!.uid).push().setValue(mesajAlanMap)
                                 .addOnCompleteListener {

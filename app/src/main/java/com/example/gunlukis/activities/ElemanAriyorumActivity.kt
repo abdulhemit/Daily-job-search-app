@@ -169,7 +169,7 @@ class elemanAriyorumActivity : AppCompatActivity() {
                         .addOnCompleteListener { task->
                             if (task.isSuccessful){
                                 Toast.makeText(this@elemanAriyorumActivity,"kayt basarili",Toast.LENGTH_SHORT).show()
-
+                                FcmTokenKaydet()
                                 SaveUserInfo(progressDialog)
                             }else{
                                 val message = task.exception.toString()
