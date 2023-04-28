@@ -62,6 +62,17 @@ class ChatActivity : AppCompatActivity() {
         var intent = intent
          bosschatID = intent.getStringExtra("chatID").toString()
          workerchatID = intent.getStringExtra("workerId").toString()
+        var sohbetEdilecekUser = intent.getStringExtra("sohbetEdilecekUser").toString()
+        println("sohbet edilecek user id: " + sohbetEdilecekUser.toString())
+        println(" aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
+        var mesajGonderenKisi = intent.extras?.getString("mesajGonderenKisi").toString()
+        println("mesaj Gonderen Kis:" + mesajGonderenKisi)
+        if (mesajGonderenKisi =="worker"){
+            workerchatID = sohbetEdilecekUser
+        }else if (mesajGonderenKisi == "boss"){
+            bosschatID = sohbetEdilecekUser
+        }
+
 
 
 

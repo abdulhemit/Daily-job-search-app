@@ -38,6 +38,22 @@ class MainActivity : AppCompatActivity() {
 
         WorkersUsers()
 
+        var secilecekUserId = intent.extras?.get("secilenUserId")
+
+
+
+        if(secilecekUserId != null){
+            var cesilmisUserId = intent.extras?.getString("secilenUserId")
+            var mesajGonderenKisi = intent.extras?.getSerializable("mesajGonderenKisi")
+            val intent = Intent(this@MainActivity,ChatActivity::class.java)
+            intent.putExtra("sohbetEdilecekUser",cesilmisUserId.toString())
+            intent.putExtra("mesajGonderenKisi",mesajGonderenKisi)
+            println("sohbet edilecek user id: " + cesilmisUserId.toString())
+            println(" aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
+            startActivity(intent)
+        }
+
+
     }
     
 
