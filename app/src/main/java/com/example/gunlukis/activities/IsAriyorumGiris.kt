@@ -198,6 +198,7 @@ class isAriyorumGiris : AppCompatActivity() {
         val currentUserId = auth.currentUser!!.uid
         val usersRaf = database.reference.child("workers")
         val userMap = HashMap<String,Any>()
+        userMap["which_user"] = "worker"
         userMap["uid"] = currentUserId
         userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
         userMap["eMail"] = binding.singUpEMail.text.toString()

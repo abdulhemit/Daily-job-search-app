@@ -34,16 +34,18 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(message: RemoteMessage) {
 
+        var click_action =  message.notification?.clickAction
         var bildirimBaslik = message.notification?.title
         var bildirimBody = message.notification?.body
         var bildirimCesilenUserId = message.data.get("secilenUserId")
-        var bildirimMesajGonderen = message.data.get("mesajGonderen")
+        var whichUser = message.data.get("which_user")
+        var BildifimMeajAktifUserID = message.data.get("aktifUserId")
 
 
         Log.e("FCM","Baslik: $bildirimBaslik govde: $bildirimBody data: $bildirimCesilenUserId")
         println("Baslik: $bildirimBaslik govde: $bildirimBody data: $bildirimCesilenUserId")
 
-        yeniMesajBildirimiGoster(bildirimBaslik,bildirimBody,bildirimCesilenUserId,bildirimMesajGonderen)
+        yeniMesajBildirimiGoster(bildirimBaslik,bildirimBody,bildirimCesilenUserId,whichUser,click_action,BildifimMeajAktifUserID)
 
     }
 
@@ -52,15 +54,18 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         bildirimBaslik: String?,
         bildirimBody: String?,
         gidilecekUserId: String?,
-        bildirimMesajGonderen: String?
+        whichUser: String?,
+        click_action: String?,
+        BildifimMeajAktifUserID: String?
     ) {
 
 
         var pendingIntent = Intent(this,MainActivity::class.java)
         pendingIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         pendingIntent.putExtra("secilenUserId",gidilecekUserId)
-        pendingIntent.putExtra("mesajGonderenKisi",bildirimMesajGonderen)
-
+        pendingIntent.putExtra("whichUser",whichUser)
+        pendingIntent.putExtra("click_action",click_action)
+        pendingIntent.putExtra("aktifUserId",BildifimMeajAktifUserID)
         var bildirimPendingIntent = PendingIntent.getActivity(this,10,pendingIntent,PendingIntent.FLAG_UPDATE_CURRENT)
 
 

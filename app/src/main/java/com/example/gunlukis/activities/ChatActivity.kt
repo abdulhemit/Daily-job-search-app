@@ -1,7 +1,6 @@
 package com.example.gunlukis.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -10,13 +9,10 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gunlukis.R
 import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.databinding.ActivityChatBinding
-import com.example.gunlukis.fragments.messageFragment
 
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
@@ -26,12 +22,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-import java.util.stream.IntStream
-import kotlin.properties.Delegates
 
 
 class ChatActivity : AppCompatActivity() {
@@ -52,38 +44,58 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         firestore = FirebaseFirestore.getInstance()
         yaziyorDatabase = FirebaseDatabase.getInstance()
         chatList = ArrayList()
+
         WorkersUsers()
         BossUsers()
-        var intent = intent
-         bosschatID = intent.getStringExtra("chatID").toString()
-         workerchatID = intent.getStringExtra("workerId").toString()
-        var sohbetEdilecekUser = intent.getStringExtra("sohbetEdilecekUser").toString()
+
+        intent.getStringExtra("chatID").toString().let {
+            bosschatID = it
+            println("Boss chat id: "+bosschatID)
+        }
+
+         intent.getStringExtra("workerId").toString().let {
+             workerchatID = it
+             println("worker chat id: "+workerchatID)
+         }
+
+
+
+
+
+
+        var sohbetEdilecekUser = intent.getStringExtra("sohbetEdilecekUserId").toString()
+        var currentUserId = intent.getStringExtra("aktifUserId").toString()
         println("sohbet edilecek user id: " + sohbetEdilecekUser.toString())
-        println(" aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
-        var mesajGonderenKisi = intent.extras?.getString("mesajGonderenKisi").toString()
-        println("mesaj Gonderen Kis:" + mesajGonderenKisi)
-        if (mesajGonderenKisi =="worker"){
-            workerchatID = sohbetEdilecekUser
-        }else if (mesajGonderenKisi == "boss"){
-            bosschatID = sohbetEdilecekUser
+        println("chat aktivity aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
+        println("suan aktif user id: " +currentUserId)
+
+        sohbetUserkontrol(sohbetEdilecekUser,currentUserId)
+
+
+        for (id in (workerList as ArrayList<String>)){
+
+            if (id == currentUserId){
+                bosschatID = sohbetEdilecekUser
+                getUserBossinfo(bosschatID)
+            }
         }
 
 
+        if (auth.currentUser?.uid == workerchatID){
 
+                getUserBossinfo(bosschatID)
 
-        bosschatID.let {
-           getUserBossinfo(it)
+        }else if(auth.currentUser?.uid == bosschatID){
+
+                getUserWorkerinfo(workerchatID)
+
         }
-        workerchatID.let {
-            getUserWorkerinfo(it)
-        }
-
-
 
 
         chatActivityAdapter = ChatActivityAdapter(chatList)
@@ -128,6 +140,18 @@ class ChatActivity : AppCompatActivity() {
 
 
     }
+    private fun sohbetUserkontrol(sohbetEdilecekUser: String, currentUserId: String) {
+
+        for (id in (bossList as ArrayList<String>)){
+
+            if (id == currentUserId){
+                workerchatID = sohbetEdilecekUser
+                println("worker bilgilerini getirmek" +workerchatID + sohbetEdilecekUser)
+                getUserWorkerinfo(workerchatID)
+            }
+        }
+
+    }
 
     override fun startActivity(intent: Intent?) {
         super.startActivity(intent)
@@ -137,6 +161,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun getWorkerChatMessage(){
+
         database.reference.child("Chats").child(auth.currentUser!!.uid).child(bosschatID)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -537,7 +562,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun BossUsers() {
-        
+
 
         bossList = ArrayList()
         val workers = FirebaseDatabase.getInstance().reference

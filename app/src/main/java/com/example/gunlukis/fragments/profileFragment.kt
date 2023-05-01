@@ -47,7 +47,9 @@ class profileFragment : Fragment() {
         val view = binding.root
         binding.out.setOnClickListener {
             auth.signOut()
-            startActivity(Intent(requireContext(), HangiKullaniciActivity::class.java))
+            var intent = Intent(requireContext(), HangiKullaniciActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
 

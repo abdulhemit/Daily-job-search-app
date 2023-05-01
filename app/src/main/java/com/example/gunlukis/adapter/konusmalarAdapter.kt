@@ -81,9 +81,13 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
                     .addOnCompleteListener {
 
                         var intent = Intent(holder.itemView.context,ChatActivity::class.java)
-                        intent.putExtra("chatID",konusmalarList[position].userId)
-                        intent.putExtra("workerId",FirebaseAuth.getInstance().currentUser!!.uid)
-                        holder.itemView.context.startActivity(intent)
+
+                            intent.putExtra("chatID",konusmalarList[position].userId)
+                            intent.putExtra("workerId",FirebaseAuth.getInstance().currentUser!!.uid)
+
+                            holder.itemView.context.startActivity(intent)
+
+
                     }
 
 
@@ -103,6 +107,8 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
                         intent.putExtra("workerId",konusmalarList[position].userId)
                         intent.putExtra("chatID",FirebaseAuth.getInstance().currentUser!!.uid)
                         holder.itemView.context.startActivity(intent)
+
+
                     }
 
 

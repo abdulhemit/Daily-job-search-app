@@ -194,6 +194,7 @@ class elemanAriyorumActivity : AppCompatActivity() {
             val currentUserId = auth.currentUser?.uid
             val usersRaf = database.reference.child("bosses")
             val userMap = HashMap<String,Any>()
+            userMap["which_user"] = "boss"
             userMap["uid"] = currentUserId.toString()
             userMap["userName"] = binding.singUpKullaniciAdi.text.toString()
             userMap["eMail"] = binding.singUpEMail.text.toString()

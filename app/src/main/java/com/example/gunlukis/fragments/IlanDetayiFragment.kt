@@ -37,6 +37,7 @@ class IlanDetayiFragment : Fragment() {
     private lateinit var postId: String
     private lateinit var userId: String
     private var workerInfo by Delegates.notNull<Boolean>()
+    private var bossId =""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +75,7 @@ class IlanDetayiFragment : Fragment() {
         }
         binding?.idMesajAt?.setOnClickListener {
             val intent = Intent(requireContext(),ChatActivity::class.java)
-            intent.putExtra("chatID",userId)
+            intent.putExtra("chatID",bossId)
             intent.putExtra("workerId",auth.currentUser!!.uid)
             startActivity(intent)
 
@@ -241,6 +242,7 @@ class IlanDetayiFragment : Fragment() {
 
                         val user = snapshot.getValue(User::class.java)
                         user.let {
+                            bossId = it?.uid.toString()
                             binding?.yayinciId?.setText(it?.userName)
                             Picasso.get().load(it?.image).into(binding?.ilanDetayiImage)
 
