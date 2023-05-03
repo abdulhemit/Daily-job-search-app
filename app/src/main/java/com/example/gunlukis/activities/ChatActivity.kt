@@ -32,12 +32,20 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var yaziyorDatabase: FirebaseDatabase
     private lateinit var firestore: FirebaseFirestore
+
     private lateinit var bosschatID: String
     private lateinit var workerchatID: String
+    private lateinit var sohbetEdilecekuserId : String
+    private lateinit var currentUserId : String
+    private lateinit var WorkerMatchingId : String
+    private lateinit var BossMatchingId : String
+
     private lateinit var workerList: MutableList<User>
     private lateinit var bossList: MutableList<User>
     private lateinit var chatList: MutableList<chat>
     private lateinit var chatActivityAdapter: ChatActivityAdapter
+    private var WhereIsFrom = ""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +58,14 @@ class ChatActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         yaziyorDatabase = FirebaseDatabase.getInstance()
         chatList = ArrayList()
+        BossMatchingId = ""
 
-        WorkersUsers()
-        BossUsers()
-
+        WhereIsFrom = intent.getStringExtra("WhereIsFrom").toString()
+        intent.getStringExtra("aktifUserId").toString().let {
+            currentUserId = it.toString()
+            println("chat aktivity aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
+            println("suan aktif user id: " +currentUserId)
+        }
         intent.getStringExtra("chatID").toString().let {
             bosschatID = it
             println("Boss chat id: "+bosschatID)
@@ -63,31 +75,96 @@ class ChatActivity : AppCompatActivity() {
              workerchatID = it
              println("worker chat id: "+workerchatID)
          }
+        intent.getStringExtra("sohbetEdilecekUserId").toString().let {
+             sohbetEdilecekuserId = it.toString()
+            println("sohbet edilecek user id: " + sohbetEdilecekuserId.toString())
 
-
-
-
-
-
-        var sohbetEdilecekUser = intent.getStringExtra("sohbetEdilecekUserId").toString()
-        var currentUserId = intent.getStringExtra("aktifUserId").toString()
-        println("sohbet edilecek user id: " + sohbetEdilecekUser.toString())
-        println("chat aktivity aktif Kullanici idsi:" + auth.currentUser?.uid.toString())
-        println("suan aktif user id: " +currentUserId)
-
-        sohbetUserkontrol(sohbetEdilecekUser,currentUserId)
-
-
-        for (id in (workerList as ArrayList<String>)){
-
-            if (id == currentUserId){
-                bosschatID = sohbetEdilecekUser
-                getUserBossinfo(bosschatID)
-            }
         }
 
 
+        if (WhereIsFrom == "FromMainActivity"){
+
+            currentUserId.let {
+
+                bossList = ArrayList()
+                val bosses = FirebaseDatabase.getInstance().reference
+                    .child("bosses")
+
+
+                bosses.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()){
+
+                            for (snap in snapshot.children){
+                                snap.key?.let { (bossList as ArrayList<String>).add(it) }
+
+                            }
+                            for (id in (bossList as ArrayList<String>)){
+
+                                if (auth.currentUser?.uid == id){
+                                    println("boss verileri current userden getirilecektir")
+                                    getUserWorkerinfo(sohbetEdilecekuserId)
+                                    BossMatchingId = id
+                                    if (auth.currentUser?.uid == currentUserId) textYaziyorKontrolBoss()
+                                    workerchatID = sohbetEdilecekuserId
+                                    getBossChatMessage(BossMatchingId,sohbetEdilecekuserId)
+                                }
+                            }
+
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                        println( "hata" + error.message.toString())
+                    }
+
+                })
+
+                workerList = ArrayList()
+
+                val workers = FirebaseDatabase.getInstance().reference
+                    .child("workers")
+
+
+                workers.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()){
+
+                            for (snap in snapshot.children){
+                                snap.key?.let { (workerList as ArrayList<String>).add(it) }
+
+                            }
+                            for (id in (workerList as ArrayList<String>)){
+
+                                if (auth.currentUser?.uid == id){
+                                    getUserBossinfo(sohbetEdilecekuserId)
+                                    WorkerMatchingId = id
+                                    if (auth.currentUser?.uid == currentUserId) textYaziyorKontrolWorker()
+                                    bosschatID = sohbetEdilecekuserId
+                                    getWorkerChatMessage()
+                                }
+                            }
+
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                        println( "hata" + error.message.toString())
+                    }
+
+                })
+
+
+
+            }
+
+        }
+        WorkersUsers()
+        BossUsers()
+
+
+
+
         if (auth.currentUser?.uid == workerchatID){
+
 
                 getUserBossinfo(bosschatID)
 
@@ -140,18 +217,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     }
-    private fun sohbetUserkontrol(sohbetEdilecekUser: String, currentUserId: String) {
 
-        for (id in (bossList as ArrayList<String>)){
-
-            if (id == currentUserId){
-                workerchatID = sohbetEdilecekUser
-                println("worker bilgilerini getirmek" +workerchatID + sohbetEdilecekUser)
-                getUserWorkerinfo(workerchatID)
-            }
-        }
-
-    }
 
     override fun startActivity(intent: Intent?) {
         super.startActivity(intent)
@@ -191,8 +257,9 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun getBossChatMessage(){
-        database.reference.child("Chats").child(auth.currentUser!!.uid).child(workerchatID)
+    private fun getBossChatMessage(id1: String,id2: String){
+
+        database.reference.child("Chats").child(id1).child(id2)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -266,7 +333,7 @@ class ChatActivity : AppCompatActivity() {
     private fun CurrentWorkerputChats(){
 
         when {
-            TextUtils.isEmpty(binding.idMessageText.text) -> Toast.makeText(this,"birşeyler yaz",Toast.LENGTH_LONG).show()
+            TextUtils.isEmpty(binding.idMessageText.text) -> Toast.makeText(this,"",Toast.LENGTH_LONG).show()
 
             else->{
 
@@ -547,6 +614,7 @@ class ChatActivity : AppCompatActivity() {
                     for (id in (workerList as ArrayList<String>)){
 
                         if (auth.currentUser?.uid == id){
+                            workerchatID = id
                             getWorkerChatMessage()
                         }
                     }
@@ -565,11 +633,11 @@ class ChatActivity : AppCompatActivity() {
 
 
         bossList = ArrayList()
-        val workers = FirebaseDatabase.getInstance().reference
+        val bosses = FirebaseDatabase.getInstance().reference
             .child("bosses")
 
 
-        workers.addValueEventListener(object : ValueEventListener {
+        bosses.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
 
@@ -580,7 +648,11 @@ class ChatActivity : AppCompatActivity() {
                     for (id in (bossList as ArrayList<String>)){
 
                         if (auth.currentUser?.uid == id){
-                            getBossChatMessage()
+                            bosschatID = id.toString()
+                            println("boss verileri getirilecek")
+                            BossMatchingId = id
+                            println("BossMatchingId :" +BossMatchingId)
+                            getBossChatMessage(bosschatID,workerchatID)
                         }
                     }
 

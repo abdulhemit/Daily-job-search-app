@@ -1,5 +1,6 @@
 package com.example.gunlukis.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 
@@ -34,6 +35,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         return konusmalarHolder(binding)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: konusmalarHolder, position: Int) {
 
 
@@ -84,6 +86,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
                             intent.putExtra("chatID",konusmalarList[position].userId)
                             intent.putExtra("workerId",FirebaseAuth.getInstance().currentUser!!.uid)
+                            intent.putExtra("WhereIsFrom","fromKonusmalarAdapter")
 
                             holder.itemView.context.startActivity(intent)
 

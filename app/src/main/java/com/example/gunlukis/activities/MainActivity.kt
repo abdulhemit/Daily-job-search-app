@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity,ChatActivity::class.java)
             intent.putExtra("sohbetEdilecekUserId",secilenUserId.toString())
             intent.putExtra("aktifUserId",aktifUserId.toString())
+            intent.putExtra("WhereIsFrom","FromMainActivity")
             startActivity(intent)
         }
 
