@@ -58,17 +58,17 @@
             app:layout_constraintTop_toBottomOf="@id/userName" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewZaman"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="10dp"
             android:text="4s"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@id/Id_sonMesaj"
             app:layout_constraintStart_toEndOf="@id/Id_sonMesaj"
             app:layout_constraintTop_toTopOf="@id/Id_sonMesaj" />
+
 
         <ImageView
             android:id="@+id/gorulduBilgisi"

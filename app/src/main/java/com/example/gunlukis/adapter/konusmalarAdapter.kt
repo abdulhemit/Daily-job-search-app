@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gunlukis.R
@@ -16,6 +17,7 @@ import com.example.gunlukis.activities.ChatActivity
 import com.example.gunlukis.databinding.KonusmalarListRowBinding
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.konusmalar
+import com.example.gunlukis.utils.TimeAgo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import java.sql.Time
 
 class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapter<konusmalarAdapter.konusmalarHolder>() {
 
@@ -35,7 +38,7 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
         return konusmalarHolder(binding)
     }
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "SetTextI18n")
     override fun onBindViewHolder(holder: konusmalarHolder, position: Int) {
 
 
@@ -45,8 +48,11 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
             var oankiKonusma = konusmalarList[position].son_mesaj?.toString()
             if (oankiKonusma.toString().length> 20 ){
                 holder.binding.IdSonMesaj.setText(oankiKonusma.toString().trim().substring(0,20)+"...")
+                holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
             }else {
                 holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+                holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
+
             }
             holder.binding.IdSonMesaj.setTextColor(ContextCompat.getColor(holder.itemView.context,R.color.pickColor))
 
@@ -60,8 +66,12 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
                 var oankiKonusma = konusmalarList[position].son_mesaj?.toString()
                 if (oankiKonusma.toString().length > 20 ){
                     holder.binding.IdSonMesaj.setText(oankiKonusma.toString().trim().substring(0,20)+"...")
+                    holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
+
                 }else {
                     holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
+                    holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
+
                 }
             }
 
@@ -69,6 +79,12 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
         }
 
+
+        holder.itemView.setOnLongClickListener {
+            Toast.makeText(holder.itemView.context,"başarılı!!!",Toast.LENGTH_LONG).show()
+
+            return@setOnLongClickListener true
+        }
 
 
         holder.itemView.setOnClickListener {

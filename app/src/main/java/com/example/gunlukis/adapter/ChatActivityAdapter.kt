@@ -72,7 +72,7 @@ class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatA
     override fun onBindViewHolder(holder: ChatHolder, position: Int) {
 
         val userText = holder.itemView.findViewById<TextView>(R.id.chatText)
-        val chatText = holder.itemView.findViewById<TextView>(R.id.chatTime)
+       // val chatText = holder.itemView.findViewById<TextView>(R.id.chatTime)
         userText.setText(chatList.get(position).chat)
 
 
@@ -118,7 +118,6 @@ class ChatActivityAdapter(var chatList :  List<chat>):RecyclerView.Adapter<ChatA
                 }
 
             })
-
     }
 
     private fun WorkersChatsonMesajGuncellenmesi(

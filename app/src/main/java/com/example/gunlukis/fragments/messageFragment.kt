@@ -32,6 +32,9 @@ class messageFragment : Fragment() {
     private lateinit var workerList: MutableList<User>
     private lateinit var bossList: MutableList<User>
 
+    companion object {
+        var fragmentAcikMi = false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance()
@@ -326,12 +329,12 @@ class messageFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
+        fragmentAcikMi = false
     }
 
     override fun onResume() {
         super.onResume()
-
+        fragmentAcikMi = true
 
     }
 

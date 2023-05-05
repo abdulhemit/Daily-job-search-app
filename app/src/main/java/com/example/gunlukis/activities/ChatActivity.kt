@@ -46,7 +46,11 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatActivityAdapter: ChatActivityAdapter
     private var WhereIsFrom = ""
 
+    private var sonGorulmeVarMi = false
 
+    companion object {
+        var chatActivityAcikMi = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -241,6 +245,8 @@ class ChatActivity : AppCompatActivity() {
                             it?.konusulananKullaniciId = bosschatID
                             it?.whichUser = "Workers"
                             chatList.add(it!!)
+                            workerMesajGorulduBilgisiniGuncellenmesi()
+                            workerSonGorulduBilgisiniGuncelleme()
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
                         }
 
@@ -254,6 +260,33 @@ class ChatActivity : AppCompatActivity() {
                 }
 
             })
+
+    }
+
+    private fun workerMesajGorulduBilgisiniGuncellenmesi() {
+
+    }
+
+    private fun workerSonGorulduBilgisiniGuncelleme() {
+
+        var Raf = database.reference.child("konusmalar")
+            .child(bosschatID).child(auth.currentUser!!.uid)
+            .child("goruldu")
+        Raf.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.getValue() == true){
+                    sonGorulmeVarMi = true
+                    binding.chatSeen.visibility = View.VISIBLE
+                }else {
+                    sonGorulmeVarMi = false
+                    binding.chatSeen.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
 
     }
 
@@ -271,6 +304,7 @@ class ChatActivity : AppCompatActivity() {
                             it?.konusulananKullaniciId = workerchatID
                             it?.whichUser = "Bosses"
                             chatList.add(it!!)
+                            bossSongorulmeBilgisiniGuncelle()
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
 
                         }
@@ -290,6 +324,28 @@ class ChatActivity : AppCompatActivity() {
 
             })
 
+    }
+
+    private fun bossSongorulmeBilgisiniGuncelle() {
+
+        var Raf = database.reference.child("konusmalar")
+            .child(workerchatID).child(auth.currentUser!!.uid)
+            .child("goruldu")
+        Raf.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.getValue() == true){
+                    sonGorulmeVarMi = true
+                    binding.chatSeen.visibility = View.VISIBLE
+                }else {
+                    sonGorulmeVarMi = false
+                    binding.chatSeen.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
     }
 
     private fun getUserBossinfo(chatID: String) {
@@ -537,6 +593,7 @@ class ChatActivity : AppCompatActivity() {
 
                 if (!TextUtils.isEmpty(binding.idMessageText.text.toString()) && p0.toString().length == 1){
                     typing = true
+
                     Log.i("Kontrol: ","Kullanici yazmaya baslamis")
                     yaziyorDatabase.reference.child("konusmalar")
                         .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
@@ -568,6 +625,11 @@ class ChatActivity : AppCompatActivity() {
 
                 if (snapshot.getValue() == true){
                     Log.i("Kontrol"," deger true olmus")
+
+                    if (sonGorulmeVarMi){
+                        binding.chatSeen.visibility = View.GONE
+                    }
+
                     binding.textYaziyor.visibility = View.VISIBLE
                     binding.textYaziyor.startAnimation(AnimationUtils.
                     loadAnimation(this@ChatActivity,
@@ -575,6 +637,11 @@ class ChatActivity : AppCompatActivity() {
 
                 }else if(snapshot.getValue() == false){
                     Log.i("Kontrol"," deger false olmus")
+
+                    if (sonGorulmeVarMi){
+                        binding.chatSeen.visibility = View.VISIBLE
+                    }
+
                     binding.textYaziyor.visibility = View.GONE
                     binding.textYaziyor.startAnimation(AnimationUtils.
                     loadAnimation(this@ChatActivity,
@@ -676,7 +743,7 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        chatActivityAcikMi = false
         if (FirebaseAuth.getInstance().currentUser?.uid == workerchatID){
 
             yaziyorDatabase.reference.child("konusmalar")
@@ -696,6 +763,7 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        chatActivityAcikMi = false
         if (FirebaseAuth.getInstance().currentUser?.uid == workerchatID){
 
              yaziyorDatabase.reference.child("konusmalar")
@@ -723,6 +791,16 @@ class ChatActivity : AppCompatActivity() {
                 .child("typing").removeEventListener(yaziyorEventListener)
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        chatActivityAcikMi = false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        chatActivityAcikMi = true
     }
 
 }

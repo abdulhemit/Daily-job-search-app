@@ -80,11 +80,12 @@ class MainActivity : AppCompatActivity() {
 
                 when (item.itemId) {
                     R.id.nav_homeWorker -> {
-
+                        messageFragment.fragmentAcikMi = false
                         moveToFragment(homeFragment())
                         return@OnNavigationItemSelectedListener  true
                     }
                     R.id.nav_messageWorker -> {
+                        messageFragment.fragmentAcikMi = true
                         moveToFragment(messageFragment())
                         /*val intent = Intent(this@MainActivity,test::class.java)
                         startActivity(intent)
@@ -94,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                         return@OnNavigationItemSelectedListener true
                     }
                     R.id.nav_profileWorker -> {
-
+                        messageFragment.fragmentAcikMi = false
                         moveToFragment(profileFragment())
                         return@OnNavigationItemSelectedListener true
                     }
@@ -106,21 +107,23 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.nav_homeBoss -> {
-
+                messageFragment.fragmentAcikMi = false
                 moveToFragment(homeFragment())
                 return@OnNavigationItemSelectedListener  true
             }
             R.id.nav_addJObBoss -> {
-
+                messageFragment.fragmentAcikMi = false
                 moveToFragment(PostJobFragment())
                 return@OnNavigationItemSelectedListener  true
+
             }
             R.id.nav_messageBoss -> {
+                messageFragment.fragmentAcikMi = true
                 moveToFragment(messageFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_profileBoss -> {
-
+                messageFragment.fragmentAcikMi = false
                 moveToFragment(profileFragment())
                 return@OnNavigationItemSelectedListener true
             }

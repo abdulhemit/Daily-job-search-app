@@ -13,7 +13,9 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.gunlukis.R
+import com.example.gunlukis.activities.ChatActivity
 import com.example.gunlukis.activities.MainActivity
+import com.example.gunlukis.fragments.messageFragment
 import com.example.gunlukis.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -45,6 +47,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         Log.e("FCM","Baslik: $bildirimBaslik govde: $bildirimBody data: $bildirimCesilenUserId")
         println("Baslik: $bildirimBaslik govde: $bildirimBody data: $bildirimCesilenUserId")
 
+        if (ChatActivity.chatActivityAcikMi == false && messageFragment.fragmentAcikMi == false)
         yeniMesajBildirimiGoster(bildirimBaslik,bildirimBody,bildirimCesilenUserId,whichUser,click_action,BildifimMeajAktifUserID)
 
     }
@@ -81,11 +84,23 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setContentTitle(bildirimBaslik)
             .setContentText(bildirimBody)
+            .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .setContentIntent(bildirimPendingIntent)
             .build()
 
-        notificationManager.notify(System.currentTimeMillis().toInt(),builder)
+        notificationManager.notify(bildirimIdOlustur(gidilecekUserId!!),builder)
+
+    }
+
+    private fun bildirimIdOlustur(gidilecekUserId: String): Int {
+
+        var id = 0
+
+        for (i in 0..5){
+            id = id +  gidilecekUserId[i].toInt()
+        }
+        return id
 
     }
     @RequiresApi(Build.VERSION_CODES.O)
