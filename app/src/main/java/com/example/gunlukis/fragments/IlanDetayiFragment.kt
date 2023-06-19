@@ -158,16 +158,8 @@ class IlanDetayiFragment : Fragment() {
                             binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
                             binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
                             binding?.isSaati?.setText(postjob?.calismaSaati)
-                            if (postjob?.isAdresi != null){
+                            binding?.isYeriId?.setText(postjob?.yer.toString())
 
-                                binding?.isYeriId?.setText(postjob.isAdresi)
-
-                            }else{
-
-                                binding?.isYeriId?.setText("Yer balirtilmedi")
-                                binding?.isYeriId?.setTextColor(resources.getColor(R.color.text))
-
-                            }
 
 
 
@@ -180,15 +172,8 @@ class IlanDetayiFragment : Fragment() {
                             binding?.isFiyatiId?.setText(postjob?.ilanFiyati)
                             binding?.isAciklamaId?.setText(postjob?.ilanAciklama)
                             binding?.isSaati?.setText(postjob?.calismaSaati)
-                            if (postjob?.isAdresi != null){
+                            binding?.isYeriId?.setText(postjob?.yer.toString())
 
-                                binding?.isYeriId?.setText(postjob.isAdresi)
-
-                            }else{
-                                binding?.isYeriId?.setText("Yer balirtilmedi")
-                                binding?.isYeriId?.setTextColor(resources.getColor(R.color.text))
-
-                            }
 
 
                         }

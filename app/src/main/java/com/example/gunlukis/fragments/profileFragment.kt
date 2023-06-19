@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.gunlukis.activities.EditProfileActivity
-import com.example.gunlukis.activities.HangiKullaniciActivity
+import com.example.gunlukis.activities.*
 import com.example.gunlukis.databinding.FragmentProfileBinding
 import com.example.gunlukis.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -57,6 +56,18 @@ class profileFragment : Fragment() {
 
         binding.EditProfile.setOnClickListener {
             startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+        }
+        binding.bugunkuLanlarim.setOnClickListener {
+            var intent = Intent(requireContext(),bugunkuilanlarActivity::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
+
+        }
+        binding.oncekiLanlarim.setOnClickListener {
+            var intent = Intent(requireContext(),onceYayinlananilanlar::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
 

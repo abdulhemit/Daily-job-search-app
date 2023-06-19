@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class homeFragment : Fragment() {
@@ -172,6 +175,9 @@ class homeFragment : Fragment() {
 
         })
     }
+
+
+
     private fun getPostJob() {
 
         val postRef = database.reference.child("PostJob")
@@ -184,7 +190,7 @@ class homeFragment : Fragment() {
                         val postList = snap.getValue<PostJob>(PostJob::class.java)
                         postList.let {
                             it?.worker = true
-                            println("homeIlanYeri ${it?.isAdresi}")
+                            println("homeIlanYeri ${it?.yer}")
                             postJobList.add(it!!)
 
                         }

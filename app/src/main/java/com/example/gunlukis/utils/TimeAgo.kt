@@ -37,7 +37,27 @@ class TimeAgo {
                 diff < 2 * HOUR_MILLIS -> "s"
                 diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} s"
                 diff < 48 * HOUR_MILLIS -> "dün"
-                else -> "${diff / DAY_MILLIS} günler önce"
+                else -> "${diff / DAY_MILLIS} gün önce"
+            }
+        }
+
+        fun getTimeAgoForJob(date: Long): String {
+            var time = date
+            if (time < 1000000000000L) {
+                time *= 1000
+            }
+
+            val now = currentDate().time
+
+            val diff = now - time
+            return when {
+
+                diff < 2 * MINUTE_MILLIS -> "1 dk"
+                diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} dk"
+                diff < 2 * HOUR_MILLIS -> "s"
+                diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} s"
+                diff < 48 * HOUR_MILLIS -> "dün"
+                else -> "${diff / DAY_MILLIS} gün  önce"
             }
         }
     }

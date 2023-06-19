@@ -245,8 +245,8 @@ class ChatActivity : AppCompatActivity() {
                             it?.konusulananKullaniciId = bosschatID
                             it?.whichUser = "Workers"
                             chatList.add(it!!)
-                            workerMesajGorulduBilgisiniGuncellenmesi()
-                            workerSonGorulduBilgisiniGuncelleme()
+                            //workerMesajGorulduBilgisiniGuncellenmesi(snap.key.toString())
+                            //bossSongorulmeBilgisiniKontrolEtme(snap.key.toString())
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
                         }
 
@@ -263,18 +263,27 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun workerMesajGorulduBilgisiniGuncellenmesi() {
+    private fun workerMesajGorulduBilgisiniGuncellenmesi(chatId: String) {
+
+        var Raf = database.reference.child("Chats")
+            .child(auth.currentUser!!.uid).child(bosschatID)
+            .child(chatId)
+            .child("goruldu").setValue(true)
+
 
     }
 
-    private fun workerSonGorulduBilgisiniGuncelleme() {
+    private fun workerSonGorulduBilgisiniKontrolEtme(chatId: String) {
 
-        var Raf = database.reference.child("konusmalar")
+
+        var Raf = database.reference.child("Chats")
             .child(bosschatID).child(auth.currentUser!!.uid)
-            .child("goruldu")
+            .child(chatId)
         Raf.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.getValue() == true){
+                println("goruldu test for worker : " +snapshot.child("goruldu").getValue() )
+                println("uid test for worker : " +snapshot.child("uid").getValue() )
+                if (snapshot.child("goruldu").getValue() == true  && snapshot.child("uid").getValue().toString().equals(auth.currentUser!!.uid)){
                     sonGorulmeVarMi = true
                     binding.chatSeen.visibility = View.VISIBLE
                 }else {
@@ -304,7 +313,9 @@ class ChatActivity : AppCompatActivity() {
                             it?.konusulananKullaniciId = workerchatID
                             it?.whichUser = "Bosses"
                             chatList.add(it!!)
-                            bossSongorulmeBilgisiniGuncelle()
+
+                            //bossSongorulmeMesajGuncelleme(snap.key.toString())
+                            //workerSonGorulduBilgisiniKontrolEtme(snap.key.toString())
                             binding.ChatsRecyclerview.smoothScrollToPosition(chatList.size -1)
 
                         }
@@ -326,14 +337,32 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun bossSongorulmeBilgisiniGuncelle() {
+    private fun bossSongorulmeMesajGuncelleme(chatId: String) {
 
-        var Raf = database.reference.child("konusmalar")
+        var Raf = database.reference.child("Chats")
+            .child(auth.currentUser!!.uid).child(workerchatID)
+            .child(chatId)
+            .child("goruldu").setValue(true)
+            .addOnCompleteListener{
+
+            }
+
+
+    }
+
+    private fun bossSongorulmeBilgisiniKontrolEtme(chatID: String) {
+
+        var Raf = database.reference.child("Chats")
             .child(workerchatID).child(auth.currentUser!!.uid)
-            .child("goruldu")
+            .child(chatID)
+        println("id test 2 " + chatID.toString())
         Raf.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.getValue() == true){
+                println("Goruldu test for boss:" +snapshot.child("goruldu").getValue())
+                println("uid test for boss: " + snapshot.child("uid").getValue())
+
+                if (snapshot.child("goruldu").getValue() == true  && snapshot.child("uid").getValue().toString().equals(auth.currentUser!!.uid)){
+
                     sonGorulmeVarMi = true
                     binding.chatSeen.visibility = View.VISIBLE
                 }else {
