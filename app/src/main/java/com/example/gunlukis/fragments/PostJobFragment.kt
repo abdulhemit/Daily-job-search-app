@@ -85,17 +85,18 @@ class PostJobFragment : Fragment() {
                 postJobMap["calismaSaati"] = binding.isSaatiId.text.toString()
 
                 val postRef = database.reference.child("PostJob")
-                postRef.child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
+                postRef.child(auth.currentUser!!.uid.toString()).child(uuid.toString()).setValue(postJobMap).addOnCompleteListener { task->
                     if (task.isSuccessful){
                         saveMyJobs()
                         GlobalScope.launch(Dispatchers.Default) {
                             //delay(24 * 60 * 60 * 1000)
-                            delay(1 * 60 * 1000)
+                            //1 * 60 * 1000
+                            delay(24 * 60 * 60 * 1000)
 
                             val myOldPostRef = database.reference
                                 .child("PostJob")
-                                .child(uuid.toString())
-                            postRef.addValueEventListener(object : ValueEventListener {
+                                .child(auth.currentUser!!.uid.toString())
+                                .addValueEventListener(object : ValueEventListener {
                                 @SuppressLint("NotifyDataSetChanged")
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     if (snapshot.exists()){
@@ -121,13 +122,15 @@ class PostJobFragment : Fragment() {
                                                 myOldPost["calismaSaati"] = calismaSaati.toString()
                                                 myOldPost["uid"] = UserUid.toString()
 
-                                                database.reference.child("myOldPost").child(auth.uid.toString()).child(ilanPostId.toString())
+                                                println("kontrol yeri $ilanPostId")
+
+                                                database.reference.child("myOldPost").child(auth.currentUser!!.uid.toString()).child(ilanPostId.toString())
                                                     .setValue(myOldPost).addOnCompleteListener {
                                                         if (it.isSuccessful){
 
 
                                                             // Delete the data from Firebase Database
-                                                            val postRef = database.reference.child("PostJob").child(uuid.toString()).removeValue()
+                                                            val postRef = database.reference.child("PostJob").child(auth.currentUser!!.uid.toString()).child(uuid.toString()).removeValue()
                                                         }
                                                     }
 
@@ -180,7 +183,7 @@ class PostJobFragment : Fragment() {
 
                 GlobalScope.launch(Dispatchers.Default) {
                     //delay(24 * 60 * 60 * 1000)
-                    delay(2 * 60 * 1000)
+                    delay(24 * 60 * 60 * 1000)
                     // Delete the data from Firebase Database
                     val MypostRef = database.reference.child("myPostJob").child(auth.currentUser!!.uid.toString()).child(uuid.toString()).removeValue()
 

@@ -3,6 +3,7 @@ package com.example.gunlukis.activities
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -33,6 +34,8 @@ class bugunkuilanlarActivity : AppCompatActivity() {
         postJobList = ArrayList()
         val fragmentmanager = supportFragmentManager
         MyjobAdapter = MyJobAdapter(postJobList,fragmentmanager)
+
+
 
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -68,6 +71,14 @@ class bugunkuilanlarActivity : AppCompatActivity() {
                             postJobList.add(it!!)
 
 
+                        }
+
+                        if(postList?.uid == null){
+                            binding.bugunkuIlan.visibility = View.INVISIBLE
+                            binding.henuzMesajYokId.visibility = View.VISIBLE
+                        }else {
+                            binding.bugunkuIlan.visibility = View.VISIBLE
+                            binding.henuzMesajYokId.visibility = View.INVISIBLE
                         }
 
                     }

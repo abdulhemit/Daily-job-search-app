@@ -6,23 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gunlukis.adapter.JobAdapter
 import com.example.gunlukis.databinding.FragmentHomeBinding
 import com.example.gunlukis.models.PostJob
 import com.example.gunlukis.models.User
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
 
 
 class homeFragment : Fragment() {
@@ -33,6 +27,7 @@ class homeFragment : Fragment() {
     private lateinit var postJobList: MutableList<PostJob>
     private lateinit var jobAdapter: JobAdapter
     private lateinit var workerList: MutableList<User>
+    private lateinit var postIdList: MutableList<String>
     private lateinit var bossList: MutableList<User>
 
 
@@ -67,6 +62,7 @@ class homeFragment : Fragment() {
         jobAdapter.notifyDataSetChanged()
         BossUsers()
         WorkersUsers()
+
         return binding?.root
     }
 
@@ -138,6 +134,34 @@ class homeFragment : Fragment() {
             }
         })
     }
+    private fun postIdList(){
+        val postRef = database.reference.child("PostJob")
+
+        postIdList = ArrayList()
+        postRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists())
+                    for (snap in snapshot.children){
+                        snap.key.let { (postIdList as ArrayList<String>).add(it!!) }
+
+                        for (userId in postIdList){
+                            for (uid in (bossList as ArrayList<String>)){
+                                if (userId == uid){
+                                    getPostJob(userId)
+                                    break
+                                }
+
+                            }
+                        }
+                    }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+    }
 
     private fun WorkersUsers() {
 
@@ -160,7 +184,7 @@ class homeFragment : Fragment() {
 
                         if (auth.currentUser!!.uid == id) {
                             binding?.bosYayinladigimIlanlar?.visibility = View.GONE
-                            getPostJob()
+                            postIdList()
 
                         }else{
                             BossUsers()
@@ -178,9 +202,10 @@ class homeFragment : Fragment() {
 
 
 
-    private fun getPostJob() {
+    private fun getPostJob(uid: String) {
 
-        val postRef = database.reference.child("PostJob")
+        val postRef = database.reference.child("PostJob").child(uid)
+
         postRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){

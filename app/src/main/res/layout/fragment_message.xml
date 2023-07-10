@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".fragments.messageFragment">
 
+
+    <TextView
+        android:id="@+id/henusMesajinizYok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        android:text="Henüz mesajiniz yok"
+        android:textColor="@color/black"
+        android:gravity="center"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerviewFragmentMessage"
         android:layout_width="match_parent"

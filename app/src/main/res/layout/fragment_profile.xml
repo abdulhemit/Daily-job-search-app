@@ -46,12 +46,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/logOut"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@drawable/ic_settings"
+                    android:src="@drawable/ic_logout"
                     android:layout_marginEnd="20dp"
                     />
 
@@ -295,26 +296,5 @@
 
 
 
-
-
-
-
-
-
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/out"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="50dp"
-        android:text="out"
-        android:textAllCaps="false"
-        android:textSize="22sp"
-
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

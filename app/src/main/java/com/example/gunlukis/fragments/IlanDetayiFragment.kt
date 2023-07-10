@@ -61,6 +61,10 @@ class IlanDetayiFragment : Fragment() {
             userId = arg?.getString("userId").toString()
             workerInfo = arg?.getBoolean("workerInfo")!!
 
+            println("postId: $postId")
+            println("user Id: $userId")
+            println("workerInfo: $workerInfo")
+
         }
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -92,7 +96,8 @@ class IlanDetayiFragment : Fragment() {
         postjobList = ArrayList()
         val postRef = database.reference
             .child("PostJob")
-            //.child(postId)
+            .child(userId)
+
 
 
 
@@ -138,6 +143,7 @@ class IlanDetayiFragment : Fragment() {
 
         val postRef = database.reference
             .child("PostJob")
+            .child(userId)
             .child(postId)
 
 

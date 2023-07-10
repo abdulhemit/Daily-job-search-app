@@ -74,6 +74,13 @@ class onceYayinlananilanlar : AppCompatActivity() {
                                 postJobList.add(it!!)
 
                             }
+                        if(postList?.uid == null){
+                            binding.oncekiIlanlarim.visibility = View.INVISIBLE
+                            binding.henuzMesajYokId.visibility = View.VISIBLE
+                        }else {
+                            binding.oncekiIlanlarim.visibility = View.VISIBLE
+                            binding.henuzMesajYokId.visibility = View.INVISIBLE
+                        }
 
 
                     }

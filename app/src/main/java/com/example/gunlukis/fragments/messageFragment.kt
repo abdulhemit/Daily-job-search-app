@@ -111,6 +111,16 @@ class messageFragment : Fragment() {
                     konusmalarList.add(0,konusmalar!!)
 
                 }
+
+                if(konusmalar?.userId == null){
+
+                    binding?.RecyclerviewFragmentMessage?.visibility = View.INVISIBLE
+                    binding?.henusMesajinizYok?.visibility = View.VISIBLE
+
+                }else {
+                    binding?.RecyclerviewFragmentMessage?.visibility = View.VISIBLE
+                    binding?.henusMesajinizYok?.visibility = View.INVISIBLE
+                }
                 konusmalaradapter.notifyItemInserted(0)
 
             }
@@ -195,6 +205,17 @@ class messageFragment : Fragment() {
                 konusmalar.let {
                     konusmalarList.add(0,konusmalar!!)
 
+
+
+                }
+                if(konusmalar?.userId == null){
+
+                    binding?.RecyclerviewFragmentMessage?.visibility = View.INVISIBLE
+                    binding?.henusMesajinizYok?.visibility = View.VISIBLE
+
+                }else {
+                    binding?.RecyclerviewFragmentMessage?.visibility = View.VISIBLE
+                    binding?.henusMesajinizYok?.visibility = View.INVISIBLE
                 }
                 konusmalaradapter.notifyItemInserted(0)
 

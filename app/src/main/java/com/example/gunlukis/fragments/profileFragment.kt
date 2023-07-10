@@ -1,5 +1,6 @@
 package com.example.gunlukis.fragments
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class profileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var workerList: MutableList<User>
+    private lateinit var alertDialog : AlertDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +46,24 @@ class profileFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.out.setOnClickListener {
-            auth.signOut()
-            var intent = Intent(requireContext(), HangiKullaniciActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+
+        binding.logOut.setOnClickListener {
+            alertDialog = AlertDialog.Builder(requireContext())
+            alertDialog.setTitle("Dikkat !")
+                .setMessage("çikmak istiyor musunuz ?")
+                .setCancelable(true)
+                .setPositiveButton("evet"){dialogInterface, it->
+                    auth.signOut()
+                    var intent = Intent(requireContext(), HangiKullaniciActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+
+                }.setNegativeButton("hayir"){dialogIterface,it->
+                    dialogIterface.cancel()
+                }
+                .show()
+
+
         }
 
 

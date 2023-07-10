@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.bugunkuilanlarActivity">
 
+    <TextView
+        android:id="@+id/henuzMesajYokId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="henüz mesajiniz yok"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bugunkuIlan"
         android:layout_width="match_parent"

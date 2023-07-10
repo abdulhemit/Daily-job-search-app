@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.gunlukis.databinding.ItemMyJobBinding
 import com.example.gunlukis.models.PostJob
 
@@ -23,7 +22,7 @@ class MyJobAdapter(val postJob: List<PostJob>, val fragmentManager: FragmentMana
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyJobHolder {
-        val binding =ItemMyJobBinding.inflate(LayoutInflater.from(parent.context))
+        val binding =ItemMyJobBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return MyJobHolder(binding)
     }
 
