@@ -1,6 +1,8 @@
 package com.example.gunlukis.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.LocusId
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gunlukis.adapter.ChatActivityAdapter
 import com.example.gunlukis.databinding.ActivityChatBinding
+import com.example.gunlukis.models.PostJob
 
 import com.example.gunlukis.models.User
 import com.example.gunlukis.models.chat
@@ -51,6 +54,7 @@ class ChatActivity : AppCompatActivity() {
     companion object {
         var chatActivityAcikMi = false
     }
+    private lateinit var gelenPostId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +67,12 @@ class ChatActivity : AppCompatActivity() {
         yaziyorDatabase = FirebaseDatabase.getInstance()
         chatList = ArrayList()
         BossMatchingId = ""
+
+        binding.idChatOnayle.setOnClickListener {
+
+
+
+        }
 
         WhereIsFrom = intent.getStringExtra("WhereIsFrom").toString()
         intent.getStringExtra("aktifUserId").toString().let {
@@ -84,7 +94,11 @@ class ChatActivity : AppCompatActivity() {
             println("sohbet edilecek user id: " + sohbetEdilecekuserId.toString())
 
         }
+        intent.getStringExtra("gidilenPostId").toString().let {
+            gelenPostId = it.toString()
+            println("workerden gelen post id: $gelenPostId")
 
+        }
 
         if (WhereIsFrom == "FromMainActivity"){
 
@@ -210,6 +224,9 @@ class ChatActivity : AppCompatActivity() {
             }
 
         }
+        binding.idChatOnayle.setOnClickListener {
+            postOnaylandiVeWorkerKullanicisinaYuklendi()
+        }
 
 
 
@@ -312,6 +329,12 @@ class ChatActivity : AppCompatActivity() {
                         chat.let {
                             it?.konusulananKullaniciId = workerchatID
                             it?.whichUser = "Bosses"
+                            if (it?.postId != null)gelenPostId = it?.postId.toString()
+                            println("control post id: ${it?.postId}")
+                            println("control post id: ${gelenPostId}")
+
+                            println("boos post idsi getirinli: $gelenPostId")
+                            
                             chatList.add(it!!)
 
                             //bossSongorulmeMesajGuncelleme(snap.key.toString())
@@ -333,6 +356,69 @@ class ChatActivity : AppCompatActivity() {
 
                 }
 
+            })
+
+    }
+    private fun postOnaylandiVeWorkerKullanicisinaYuklendi () {
+
+        val myOldPostRef = database.reference
+            .child("PostJob")
+            .child(auth.currentUser!!.uid.toString())
+            .addValueEventListener(object : ValueEventListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        for (snap in snapshot.children){
+                            val postList = snap.getValue<PostJob>(PostJob::class.java)
+
+                            if (postList?.postId == gelenPostId){
+                                postList.let {
+
+                                    it?.worker = false
+                                    var ilanAdresi =  it?.yer
+                                    var ilanAdi = it?.ilanAdi
+                                    var ilanFiyati = it?.ilanFiyati
+                                    var ilanPostId = it?.postId
+                                    var ilanAciklamasi = it?.ilanAciklama
+                                    var calismaSaati = it?.calismaSaati
+                                    var UserUid = it?.uid
+                                    println("post id dogru : ${it?.postId}")
+                            }
+
+
+                                /*
+
+                                var myOldPost = HashMap<String,Any>()
+                                myOldPost["ilanAdresi"] = ilanAdresi.toString()
+                                myOldPost["ilanAdi"] = ilanAdi.toString()
+                                myOldPost["ilanFiyati"] = ilanFiyati.toString()
+                                myOldPost["ilanPostId"] = ilanPostId.toString()
+                                myOldPost["ilanAciklamasi"] = ilanAciklamasi.toString()
+                                myOldPost["calismaSaati"] = calismaSaati.toString()
+                                myOldPost["uid"] = UserUid.toString()
+
+                                println("kontrol yeri $ilanPostId")
+
+                                database.reference.child("myOldPost").child(auth.currentUser!!.uid.toString()).child(ilanPostId.toString())
+                                    .setValue(myOldPost).addOnCompleteListener {
+                                        if (it.isSuccessful){
+
+                                        }
+                                    }
+
+                                 */
+
+
+                            }
+
+                        }
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
             })
 
     }
@@ -384,6 +470,7 @@ class ChatActivity : AppCompatActivity() {
                 if (snapshot.exists()){
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
+                        binding.idChatOnayle.visibility = View.GONE
                         binding.idChatName.text = it?.userName
                         Picasso.get().load(it?.image).into(binding.idProfileChat)
                     }
@@ -403,6 +490,7 @@ class ChatActivity : AppCompatActivity() {
                 if (snapshot.exists()){
                     val user = snapshot.getValue<User>(User::class.java)
                     user.let {
+
                         binding.idChatName.text = it?.userName
                         Picasso.get().load(it?.image).into(binding.idProfileChat)
                     }
@@ -447,6 +535,9 @@ class ChatActivity : AppCompatActivity() {
                             mesajAlanMap["goruldu"] = false
                             mesajAlanMap["type"] = "text"
                             mesajAlanMap["kime_mesaj_gonderildi"] = "Boss"
+                            mesajAlanMap["postId"] = gelenPostId.toString()
+                            println("post id gonderiliyor : $gelenPostId")
+
 
 
                             database.reference.child("Chats").child(bosschatID).child(auth.currentUser!!.uid).push().setValue(mesajAlanMap)

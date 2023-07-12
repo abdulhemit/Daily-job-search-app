@@ -70,7 +70,10 @@ class konusmalarAdapter(var konusmalarList: List<konusmalar>):RecyclerView.Adapt
 
                 }else {
                     holder.binding.IdSonMesaj.setText(konusmalarList[position].son_mesaj)
-                    holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
+                    konusmalarList[position].time.let {
+                        holder.binding.textViewZaman.setText(TimeAgo.getTimeAgo(konusmalarList[position].time!!.toLong()))
+
+                    }
 
                 }
             }

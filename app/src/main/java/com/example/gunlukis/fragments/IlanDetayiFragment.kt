@@ -81,6 +81,7 @@ class IlanDetayiFragment : Fragment() {
             val intent = Intent(requireContext(),ChatActivity::class.java)
             intent.putExtra("chatID",bossId)
             intent.putExtra("workerId",auth.currentUser!!.uid)
+            intent.putExtra("gidilenPostId",postId)
             startActivity(intent)
 
         }

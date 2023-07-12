@@ -8,6 +8,7 @@ data class chat(
     val type: String? = null,
     var konusulananKullaniciId : String? = null,
     var sonMesaj: String? = null,
-    var whichUser: String? = null
+    var whichUser: String? = null,
+    var postId: String? = null
 ) {
 }
